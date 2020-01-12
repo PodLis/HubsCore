@@ -1,0 +1,9 @@
+name: HubsCore
+version: ${project.version}
+main: ru.hubsmc.hubscore.HubsCore
+api-version: 1.13
+prefix: HubsCore
+load: STARTUP
+authors: [Rosenboum]
+description: Core plugin for HUBS
+website: hubsmc.ru

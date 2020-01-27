@@ -1,0 +1,53 @@
+
+menus:
+  titles:
+    title-not-found: "TITLE NOT FOUND"
+  buttons:
+    return:
+      name: "&fВозврат"
+      base: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzI0MzE5MTFmNDE3OGI0ZDJiNDEzYWE3ZjVjNzhhZTQ0NDdmZTkyNDY5NDNjMzFkZjMxMTYzYzBlMDQzZTBkNiJ9fX0="
+    prev:
+      name: "&fНазад"
+      positive-base: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTRjNDE3NDZhZjU1N2EyNGJlOGEwOTAzNjlhNTkxYWU2M2Q1Y2U5YzRiZjQwNWQzNTQyNDdkODEwYzdjNyJ9fX0="
+      negative-base: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTE4YTJkZDViZWYwYjA3M2IxMzI3MWE3ZWViOWNmZWE3YWZlODU5M2M1N2E5MzgyMWU0MzE3NTU3MjQ2MTgxMiJ9fX0="
+    next:
+      name: "&fВперёд"
+      positive-base: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmI0YzFkYmQ4NTQ0Y2ZhZWQ5NjNkZjRkMTM5YmM4YmFjNGI3NmFjNGJiYjMwYWI4NmY3NmZiYzMxYWI5YTcwIn19fQ=="
+      negative-base: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDk5ZjI4MzMyYmNjMzQ5ZjQyMDIzYzI5ZTZlNjQxZjRiMTBhNmIxZTQ4NzE4Y2FlNTU3NDY2ZDUxZWI5MjIifX19"
+
+chat:
+  prefixes:
+    hubscore: "&6[&eHC&6]&e "
+    hubs: "&0&l[&6&lHUBS&0&l]&r "
+  common-messages:
+    no-perm: "У вас нет привилегий, чтобы использовать %command%!"
+    unknown-command: "Неизвестная команда %command%"
+    usage: "Неправильное использование команды, попробуйте: /%usage%"
+    must-be-a-player: "Исполнитель %command% должен быть игроком!"
+    must-be-online: "Игрок %player% должен быть онлайн для исполнения %command%"
+    unknown-error: "Произошла непредвиденная ошибка! Пожалуйста, обратитесь к Администрации"
+  command-messages:
+    convert:
+      not-a-number: "Мы не переводчики, чтобы переводить буквы!"
+      not-enough: "Ты хочешь перевести больше, чем у тебя есть!"
+      success-1: "Ты перевёл &6%hubixes_rem%Ⓗ&f в &e%dollars_add%$&f."
+      success-2: "Теперь у тебя &6%hubixes_now%Ⓗ&f и &e%dollars_now%$&f."
+    mana:
+      header: "Твоя мана-статистика:"
+      mana: "Текущее значение маны: %mana%"
+      max: "Максимальное значение маны: %max%"
+      regen: "Регенерация маны в минуту: %regen%"
+    pay:
+      not-a-number: "У нас нельзя платить буквами!"
+      not-at-all: "У тебя нет привилегии, чтобы платить всем игрокам!"
+      pay-all: "Сорян, автор плагина не успел доделать перевод всем игрокам..."
+      rec-not-online: "Получатель должен быть онлайн!"
+      stop-self-licks: "Ты не можешь заплатить самому себе!"
+      not-enough: "Ты хочешь перевести больше, чем у тебя есть!"
+      success-to-player: "Ты перевёл &e%amount%$&f игроку %rec_name%. Теперь у тебя &e%player_now%$&f."
+      success-to-rec: "Игрок %player_name% перевёл тебе &e%amount%$&f. Теперь у тебя &e%rec_now$&f."
+    top:
+      author-loh: "Автор ещё не закончил топ. Ждите..."
+
+console:
+  core-prefix: "[HubsCore]"

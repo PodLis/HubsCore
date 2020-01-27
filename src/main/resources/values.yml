@@ -1,0 +1,45 @@
+# HubsValues
+
+sql:
+  database: minecraft
+  user: Minecraft
+  password: qwerty123
+
+# load values on player join or not. turn on if this server is not a lobby (authorise plugin missing)
+load-values-on-join: false
+
+economy-types:
+  - "hubixes"
+  - "dollars"
+  - "mana"
+  - "max"
+  - "regen"
+
+hubixes:
+  name: "Hubixes"
+  symbol: "Ⓗ"
+  color: "&6"
+
+dollars:
+  name: "Dollars"
+  symbol: "$"
+  color: "&e"
+  rate: 1000
+
+mana:
+  name: "Mana"
+  symbol: "★"
+  color: "&b"
+  start_amount: 20
+
+max:
+  name: "Max mana"
+  symbol: "★"
+  color: "&b"
+
+regen:
+  name: "Mana regen"
+  symbol: "★"
+  color: "&b"
+  start_amount: 2 # how many mana points will accrual every minute
+  offline_coefficient: 10 # how minutes per accrual mana if player is offline

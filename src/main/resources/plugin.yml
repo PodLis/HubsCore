@@ -7,3 +7,62 @@ load: STARTUP
 authors: [Rosenboum]
 description: Core plugin for HUBS
 website: hubsmc.ru
+
+commands:
+  hubscore:
+    description: The main command for HubsCore
+    usage: <command>
+    aliases: [hc]
+  utils:
+    description: The utilities command for HubsCore
+    usage: <command>
+    permission: "hubscore.utils"
+  pay:
+    description: The pay command
+    usage: <command>
+    permission: "hubs.pay"
+  convert:
+    description: The convert command
+    usage: <command>
+    permission: "hubs.convert"
+  top:
+    description: The dollars top command
+    usage: <command>
+    permission: "hubs.top"
+
+permissions:
+  hubscore.*:
+    description: Gives access to all HubsCore permissions.
+    children:
+      hubscore.utils: true
+      hubscore.reload: true
+      hubscore.value.*: true
+      hubs.pay.*: true
+      hubs.convert: true
+      hubs.top: true
+  hubscore.utils:
+    description: Gives access to utils commands.
+    default: false
+  hubscore.reload:
+    description: Reload the config files.
+    default: false
+  hubscore.value.*:
+    children:
+      hubscore.value.check: true
+      hubscore.value.change: true
+  hubscore.value.check:
+    default: false
+  hubscore.value.change:
+    default: false
+  hubs.pay.*:
+    children:
+      hubs.pay.normal: true
+      hubs.pay.all: true
+  hubs.pay.normal:
+    default: false
+  hubs.pay.all:
+    default: false
+  hubs.convert:
+    default: false
+  hubs.top:
+    default: false

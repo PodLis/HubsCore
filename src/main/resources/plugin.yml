@@ -37,6 +37,7 @@ permissions:
       hubscore.utils: true
       hubscore.reload: true
       hubscore.value.*: true
+      hubscore.chesterton.*: true
       hubs.pay.*: true
       hubs.convert: true
       hubs.top: true
@@ -53,6 +54,11 @@ permissions:
   hubscore.value.check:
     default: false
   hubscore.value.change:
+    default: false
+  hubscore.chesterton.*:
+    children:
+      hubscore.chesterton.open: true
+  hubscore.chesterton.open:
     default: false
   hubs.pay.*:
     children:

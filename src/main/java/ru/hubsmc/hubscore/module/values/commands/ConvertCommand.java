@@ -1,16 +1,13 @@
 package ru.hubsmc.hubscore.module.values.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
+import ru.hubsmc.hubscore.HubsCommand;
 import ru.hubsmc.hubscore.Permissions;
 import ru.hubsmc.hubscore.PluginUtils;
 import ru.hubsmc.hubscore.module.values.HubsValues;
-import ru.hubsmc.hubscore.util.MessageUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,68 +17,59 @@ import java.util.logging.Level;
 import static ru.hubsmc.hubscore.module.values.api.API.*;
 import static ru.hubsmc.hubscore.util.MessageUtils.*;
 
-public class ConvertCommand implements CommandExecutor, TabCompleter {
+public class ConvertCommand extends HubsCommand {
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        ConfigurationSection namespace = MessageUtils.getCommandNamespace("convert");
-        try {
-            if (command.getName().equalsIgnoreCase("convert")) {
-
-                if (!(sender instanceof Player)) {
-                    sendPrefixMessage(sender, "Converter must be a player");
-                    return true;
-                }
-
-                Player player = (Player) sender;
-
-                if (!Permissions.CONVERT.senderHasPerm(player)) {
-                    sendNoPermMessage(player, label);
-                    return true;
-                }
-                if (args.length < 1) {
-                    sendNotEnoughArgsMessage(player, label);
-                    return true;
-                }
-
-                int amount;
-                try {
-                    amount = Integer.parseInt(args[0]);
-                } catch (NumberFormatException e) {
-                    sendPrefixMessage(player, "Мы не переводчики, чтобы переводить буквы!");
-                    return true;
-                }
-
-                if (!takeHubixes(player, amount)){
-                    sendPrefixMessage(player, "Ты хочешь перевести больше, чем у тебя есть!");
-                    return true;
-                }
-
-                int rate = HubsValues.HUBIXES_TO_DOLLARS_RATE;
-
-                if (rate <= 0) {
-                    sendPrefixMessage(player, "Произошла непредвиденная ошибка! Пожалуйста, обратитесь к Администрации");
-                    PluginUtils.logConsole(Level.WARNING, "Invalid configuration (HUBIXES_TO_DOLLARS_RATE <= 0)");
-                    return true;
-                }
-
-                addDollars(player, amount * rate);
-
-                sendPrefixMessage(player, "Ты перевёл &6" + amount + "Ⓗ&f в &e" + amount*rate + "$&f.");
-                sendPrefixMessage(player, "Теперь у тебя &6" + getHubixes(player) + "Ⓗ&f и &e" + getDollars(player) + "$&f.");
-
-                return true;
-
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-            PluginUtils.logConsole(Level.WARNING, "Some troubles with command 'convert'.");
-        }
-        return true;
+    public ConvertCommand() {
+        super("convert", Permissions.CONVERT, true, 1);
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public boolean onHubsCommand(CommandSender sender, Command command, String label, String[] args) {
+
+        Player player = (Player) sender;
+
+        int amount;
+        try {
+            amount = Integer.parseInt(args[0]);
+            if (amount <= 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            sendPlaceholderMessage(player, "not-a-number");
+            return true;
+        }
+
+        if (!takeHubixes(player, amount)) {
+            sendPlaceholderMessage(player, "not-enough");
+            return true;
+        }
+
+        int rate = HubsValues.HUBIXES_TO_DOLLARS_RATE;
+
+        if (rate <= 0) {
+            sendUnknownErrorMessage(player);
+            PluginUtils.logConsole(Level.WARNING, "Invalid configuration (HUBIXES_TO_DOLLARS_RATE <= 0)");
+            return true;
+        }
+
+        addDollars(player, amount * rate);
+
+        sendPlaceholderMessage(player, "success-1",
+                "hubixes_rem", String.valueOf(amount),
+                "dollars_add", String.valueOf(amount*rate)
+        );
+
+        sendPlaceholderMessage(player, "success-2",
+                "hubixes_now", String.valueOf(getHubixes(player)),
+                "dollars_now", String.valueOf(getDollars(player))
+        );
+
+        return true;
+
+    }
+
+    @Override
+    public List<String> onHubsComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> completionList = new ArrayList<>();
         String partOfCommand;
         List<String> cmds = new ArrayList<>();

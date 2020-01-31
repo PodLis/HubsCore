@@ -1,0 +1,289 @@
+
+# Boss-bars ^_^
+boss-bars:
+
+  # The delay with which boss-bars are changed (in seconds)
+  delay: 5
+
+  # Possible color options:
+  # BLUE, GREEN, PINK, PURPLE, RED, WHITE, YELLOW
+  #
+  # Possible segmented options:
+  # SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20, SOLID
+  #
+  # Possible progress options:
+  # real number from 0 to 1
+
+  bars:
+    1:
+      colorFALSE: BLUE
+      segmented: SOLID
+      progress: 1
+      text: '&9&l✔&5&l✔&f &bПосмотри, какие вещи есть у донатеров &d&l/showkit&f &5&l✔&9&l✔'
+
+    2:
+      color: RED
+      segmented: SEGMENTED_20
+      progress: 1
+      text: '&cСКИДКА &4&l50%&e на &6Ⓗ &lХабиксы &6Ⓗ &e- /donate'
+
+    3:
+      color: PINK
+      segmented: SOLID
+      progress: 1
+      text: '&b&l⤤&3&l⤤ &d&lЛорд&3 может починить &b&lвсе&f &b&lпредметы&3 в инвентаре &3&l⤣&b&l⤣'
+    4:
+      color: BLUE
+      segmented: SOLID
+      progress: 1
+      text: '&b&l&nＨＵＢＳ&e Не знаешь что делать? Пиши &9/hubs! &b&l&nＨＵＢＳ'
+
+    5:
+      color: BLUE
+      segmented: SOLID
+      progress: 1
+      text: '&d&l⬈&5&l⬈&e Из грязи в князи! &d&lЛорд&e всего за &6&l399Ⓗ &5&l⬉&d&l⬉'
+
+    6:
+      color: GREEN
+      segmented: SOLID
+      progress: 0
+      text: '&c&l!!! &c&lХот-дог&c - 30 секунд, &a&lВип&a - 30 дней.&e Выбор за тобой &e&l!!!      '
+
+    7:
+      color: RED
+      segmented: SEGMENTED_20
+      progress: 1
+      text: '&eКупив &4&l✩&c&lИМБУ&4&l✩&e ты получишь все команды сервера, даже &4&l/kick'
+
+    8:
+      color: YELLOW
+      segmented: SOLID
+      progress: 1
+      text: '&e&l⇪&a&l⇪&2&l⇪HP⇪&a&l⇪&e&l⇪ &eДелай разминку каждые &a&lполчаса &e&l⇪&a&l⇪&2&l⇪HP⇪&a&l⇪&e&l⇪'
+
+    9:
+      color: RED
+      segmented: SOLID
+      progress: 1
+      text: '&6&lИМБА&c может ломать &6&l⬱&4&lБедрок&6&l⇶&c в выживании!'
+
+    10:
+      color: PURPLE
+      segmented: SOLID
+      progress: 1
+      text: '&d&l⚝&5&l⚝ &eКупи &d&lЛорда &eи получи &eчитер&6с&cк&k&4&kи&4&kе &cп&6р&eедемты! &5&l⚝&d&l⚝'
+
+    11:
+      color: BLUE
+      segmented: SOLID
+      progress: 0
+      text: '&9✆ &6/discord&e - заходи на наш &9&lдискорд&e сервер!&9 ✆'
+
+    12:
+      color: YELLOW
+      segmented: SOLID
+      progress: 0
+      text: '&e❖&6❖&c❖ &6/hubs&e - уникальное меню сервера &6&lHUBS&e! &c❖&6❖&e❖'
+
+    13:
+      color: PINK
+      segmented: SOLID
+      progress: 0
+      text: '&9&l?&3&l?&e&l?&6&l?&c&l?&6 /help&e - посмотреть &dк&cр&6а&eс&3и&3в&9о&cе &eменю команд сервера &c&l?&6&l?&e&l?&3&l?&9&l?'
+
+    14:
+      color: YELLOW
+      segmented: SOLID
+      progress: 1
+      text: '&e☀&f♺&b☽ &a&lВип&e может менять время в майнкрафте &6&l/ptime &b☽&f♺&e☀'
+
+    15:
+      color: YELLOW
+      segmented: SOLID
+      progress: 1
+      text: '&e※&a※&2※ &2&l/donate&a - купи привилегию находясь в &2майнкрафте&a! &2※&a※&e※'
+
+    16:
+      color: YELLOW
+      segmented: SOLID
+      progress: 1
+      text: '&c&l!! &6&lИМБА&e имеет все флаги сервера &c&l!!&a Даже на &2бессмертие&a в регионе &2&l!!'
+
+    17:
+      color: YELLOW
+      segmented: SOLID
+      progress: 0
+      text: '&e&l✎&6&l✎&9&l✎ &6/vk&e - cвежие новости сервера в группе &9&lВконтакте &9&l✎&6&l✎&e&l✎'
+
+    18:
+      color: GREEN
+      segmented: SOLID
+      progress: 1
+      text: '&e&l$$$ &2Находишься на сервере - получаешь деньги &e&l$$$'
+
+    19:
+      color: RED
+      segmented: SEGMENTED_10
+      progress: 1
+      text: '&4✠ &c&lАрена&6 - &eуникальный &cПвП&e режим (&6/menu&e) &4✠'
+
+    20:
+      color: GREEN
+      segmented: SEGMENTED_20
+      progress: 0
+      text: '&a&lツ &cЕсли ты нашёл баг&a - напиши о нём в ВК &a&lツ'
+
+    21:
+      color: BLUE
+      segmented: SOLID
+      progress: 1
+      text: '&b✛ &d&l/shop&b - купи &5&lлюбой&b игровой &5&lпредмет &b✛'
+
+    22:
+      color: GREEN
+      segmented: SOLID
+      progress: 1
+      text: '&6&l /help&e - ну очень удобное меню всех команд! &aПопробуй!'
+
+
+# Action-bars O_o
+action-bars:
+
+  # The delay with which action-bars are displayed (in seconds)
+  delay: 300
+
+  bars:
+    1:
+      stand-time: 5
+      text: '&6║ &l&3Любой &6донат за Хабиксы в &l&3&n/donate &6║'
+
+    2:
+      stand-time: 5
+      text: '&6&l⤪&c&l⤪&4&l⤪ &6&lИМБА&e может &c&lкикнуть&e кого угодно &4&l⤨&c&l⤨&6&l⤨'
+
+    3:
+      stand-time: 5
+      text: '&6&l☀ &e&lКупи &fЗрение на месяц&e&l и копай шахты без факелов! &6&l☀'
+
+    4:
+      stand-time: 5
+      text: '&l➢ &e&lКупи &fАФК на месяц&e&l и накопи за ночь 6000$!'
+
+    5:
+      stand-time: 5
+      text: '&a&l⚶&6&l⚶&e&l⚶ &a&lВип&e может телепортировать игрока к себе &6&l/tphere &e&l⚶&6&l⚶&a&l'
+
+    6:
+      stand-time: 5
+      text: '&l☁☁ &bЛетай до небес на всех серверах! &6&l’Полет’&b ✈ &bвсего за &6&l39Ⓗ ! &f&l☁☁'
+
+    7:
+      stand-time: 5
+      text: '&6&l⤪&c&l⤪&4&l⤪ &6&lИМБА&e может &c&lкикнуть&e кого угодно &4&l⤨&c&l⤨&6&l⤨'
+
+    8:
+      stand-time: 5
+      text: '&a$$$ &eСтань &2&lМиллионером &eв майнкрафте! Купи &2&l1 000 000$ &eвсего за  &2&l399Ⓗ &a$$$'
+
+    9:
+      stand-time: 5
+      text: '&d&lЛорд&b может вводить все команды &5&nбез&f &5&nзадержки!'
+
+    10:
+      stand-time: 5
+      text: '&b&lТоп &3м&9о&1ж&5е&dт &cп&4и&6с&eа&aт&2ь &aв &eч&6а&4т&cе &dц&5в&1е&9т&3н&bы&3е &9с&1и&5м&dв&cо&4л&6ы &e&l'
+
+    11:
+      stand-time: 5
+      text: '&a☞ &eУ &a&lВипа&e есть &6&l10 уникальных флагов&e региона &6&l/help vip &a☜'
+
+    12:
+      stand-time: 5
+      text: '&c⫷ &6&lИМБА&e может❂&b поменять〄&a биом⥉ &fна☃ &9любой☁ &c⫸'
+
+    13:
+      stand-time: 5
+      text: '&2&l⟰&a &lВип&e может поставить &6&l3 точки дома &e&l-&6&l/sethome &2&l⟰'
+
+    14:
+      stand-time: 5
+      text: '&9&l⫷ &7Купи &lКроличью лапку &7и &6переме&9щайся &7со скоростью света! &6&l⫸'
+
+    15:
+      stand-time: 5
+      text: '&b☵☵☵ &9Купи &b&l≈Скорость &9и бегай/летай в &b❿✘ &9быстрее! &b☵☵☵'
+
+    16:
+      stand-time: 5
+      text: '&6&lХабиксы&2 можно купить на сайте &2&npay.hubsmc.ru&2!'
+
+    17:
+      stand-time: 5
+      text: '&a❂ &6&lИМБА&e может просмотреть &aинвентарь&e и &dэндер-сундк&e другого игрока &d❂'
+
+    18:
+      stand-time: 5
+      text: '&8❬&7❮&f❰ &b&lТоп&f может починить предмет в руке &e&l/repair&f ❱&7❯&8❭'
+
+    19:
+      stand-time: 5
+      text: '&6&l《&eС промокодом &c&nRWRGO&f &6&lИмба &eдешевле &d&lЛорда &6&l》'
+
+    20:
+      stand-time: 5
+      text: '&e⛏&a⛏&2⛏ &a&lКирка Фортуны&e добывает больше чем &6&lх4&e алмазов &2⛏&a⛏&e⛏'
+
+    21:
+      stand-time: 5
+      text: '&4+♥ &b&lТоп &eможет восстанавливать себе здоровье &6&l/heal &4♥+'
+
+    22:
+      stand-time: 7
+      text: '&8Пс... Вводишь &7/help &8- открывается меню кликабельных команд...'
+
+
+# Chat messages X_X
+chat-messages:
+
+  # The delay with which messages are printed in chat (in seconds)
+  delay: 750
+
+  messages:
+
+    shop:
+      raw: true
+      text:
+        - '<>&eЗаходи на <1,shop>&bДонат-сайт&e. <>&c&lСКИДКИ до 90%'
+        - '<1,shop>&eКликай &b&nсюда&e, чтобы не упустить выгоду!'
+
+    ds:
+      raw: true
+      text:
+        - '<>&eЗаходи в <1,dsurl>&9Дискорд&e, <>&eчтобы присоединиться к дружному'
+        - '<>&eкомьюнити &6&lHUBS&e. <1,dsurl>&eКликай &9&nсюда&e, чтобы перейти!'
+
+    vk:
+      raw: true
+      text:
+        - '<>Подпишись на &6HUBS <1,vkurl>&fв &bВК&f, чтобы не пропускать новости!'
+        - '<>Всегда свежая информация. &e30 октября&f розыгрыш <1,vkurl>&b&nздесь!'
+
+  hover:
+    1: '&eНажми, чтобы зайти =)'
+    2: '&eBad'
+  execute:
+    shop: 'U| http://pay.hubsmc.ru/'
+    dsurl: 'U| https://discord.gg/ruzfpHv'
+    vkurl: 'U| https://vk.com/hubsmc'
+    1: 'A| /hubs'
+    2: 'U| http://hubsmc.ru'
+    3: 'E| /help'
+
+periodic-feed:
+  delay: 60
+  cmd-to-console: 'ecofeed'
+  cmd-to-player: 'tablo'
+
+# DO NOT CHANGE THIS!
+config-version: 4

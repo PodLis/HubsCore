@@ -13,6 +13,7 @@ public class LeaveEvent implements Listener {
         for (CoreModule coreModule : PluginUtils.getModules()) {
             coreModule.onPlayerLeave(event.getPlayer());
         }
+        PluginUtils.getHubsServer().onPlayerQuit(event.getPlayer());
     }
 
 }

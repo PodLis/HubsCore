@@ -6,83 +6,83 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import ru.hubsmc.hubscore.module.values.HubsValues;
 import ru.hubsmc.hubscore.util.MessageUtils;
 import java.util.List;
 import java.util.logging.Level;
 
-import static ru.hubsmc.hubscore.module.values.api.API.*;
-import static ru.hubsmc.hubscore.module.values.api.API.getDollars;
 import static ru.hubsmc.hubscore.util.MessageUtils.*;
-import static ru.hubsmc.hubscore.util.MessageUtils.sendPrefixMessage;
+import static ru.hubsmc.hubscore.util.StringUtils.setPlaceholdersPrefixes;
 
 public abstract class HubsCommand implements CommandExecutor, TabCompleter {
 
+    private String name;
+    private Permissions permission;
+    private boolean mustBePlayer;
+    private int minArgs;
+    private String usage;
+
+    private ConfigurationSection namespace;
+
+    public HubsCommand(String name, Permissions permission, boolean mustBePlayer, int minArgs) {
+        this.name = name;
+        this.permission = permission;
+        this.mustBePlayer = mustBePlayer;
+        this.minArgs = minArgs;
+    }
+
     @Override
     public final boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        ConfigurationSection namespace = MessageUtils.getCommandNamespace("convert");
+        namespace = MessageUtils.getCommandNamespace(name);
+        usage = namespace.getString("usage");
         try {
-            if (command.getName().equalsIgnoreCase("convert")) {
+            if (command.getName().equalsIgnoreCase(name)) {
 
-                if (!(sender instanceof Player)) {
-                    sendPrefixMessage(sender, "Converter must be a player");
+                if (permission != null && !permission.senderHasPerm(sender)) {
+                    sendNoPermMessage(sender, name);
                     return true;
                 }
 
-                Player player = (Player) sender;
-
-                if (!Permissions.CONVERT.senderHasPerm(player)) {
-                    sendNoPermMessage(player, label);
-                    return true;
-                }
-                if (args.length < 1) {
-                    sendNotEnoughArgsMessage(player, label);
+                if (args.length < minArgs) {
+                    sendWrongUsageMessage(sender, usage);
                     return true;
                 }
 
-                int amount;
-                try {
-                    amount = Integer.parseInt(args[0]);
-                } catch (NumberFormatException e) {
-                    sendPrefixMessage(player, "Мы не переводчики, чтобы переводить буквы!");
+                if (mustBePlayer && !(sender instanceof Player)) {
+                    sendMustBePlayerMessage(sender, name);
                     return true;
+                } else if (mustBePlayer) {
+                    Player player = (Player) sender;
+                    return onHubsCommand(player, command, label, args);
+                } else {
+                    return onHubsCommand(sender, command, label, args);
                 }
-
-                if (!takeHubixes(player, amount)){
-                    sendPrefixMessage(player, "Ты хочешь перевести больше, чем у тебя есть!");
-                    return true;
-                }
-
-                int rate = HubsValues.HUBIXES_TO_DOLLARS_RATE;
-
-                if (rate <= 0) {
-                    sendPrefixMessage(player, "Произошла непредвиденная ошибка! Пожалуйста, обратитесь к Администрации");
-                    PluginUtils.logConsole(Level.WARNING, "Invalid configuration (HUBIXES_TO_DOLLARS_RATE <= 0)");
-                    return true;
-                }
-
-                addDollars(player, amount * rate);
-
-                sendPrefixMessage(player, "Ты перевёл &6" + amount + "Ⓗ&f в &e" + amount*rate + "$&f.");
-                sendPrefixMessage(player, "Теперь у тебя &6" + getHubixes(player) + "Ⓗ&f и &e" + getDollars(player) + "$&f.");
-
-                return true;
 
             }
         } catch (Throwable e) {
             e.printStackTrace();
-            PluginUtils.logConsole(Level.WARNING, "Some troubles with command 'convert'.");
+            PluginUtils.logConsole(Level.WARNING, "Some troubles with command '" + name + "'.");
         }
         return true;
     }
 
     @Override
     public final List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (permission != null && !permission.senderHasPerm(sender)) {
+            return null;
+        }
         return onHubsComplete(sender, command, alias, args);
     }
 
     abstract public boolean onHubsCommand(CommandSender sender, Command command, String label, String[] args);
 
     abstract public List<String> onHubsComplete(CommandSender sender, Command command, String alias, String[] args);
+
+    protected final void sendPlaceholderMessage(CommandSender sender, String path, String... data) {
+        sendMessage(sender, setPlaceholdersPrefixes(getNamespaceString(namespace, path, "command-messages." + name), data));
+    }
+
+    protected final void sendDefaultUsage(CommandSender sender) {
+        sendWrongUsageMessage(sender, usage);
+    }
 
 }

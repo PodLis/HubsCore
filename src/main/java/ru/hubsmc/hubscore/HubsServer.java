@@ -1,17 +1,21 @@
 package ru.hubsmc.hubscore;
 
+import org.bukkit.entity.Player;
+
 public interface HubsServer {
 
-    void onStart();
+    void afterCoreStart();
 
-    void onResume();
+    void beforeCoreStop();
 
-    void onPause();
+    void onPluginEnable();
 
-    void onStop();
+    void onPluginDisable();
 
-    void onPlayerJoin();
+    void onPlayerJoin(Player player);
 
-    void onPlayerQuit();
+    void onPlayerQuit(Player player);
+
+    void onSchedule();
 
 }

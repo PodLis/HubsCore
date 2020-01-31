@@ -1,11 +1,15 @@
 package ru.hubsmc.hubscore;
 
 import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import ru.hubsmc.hubscore.exception.CommandNotFoundException;
 import ru.hubsmc.hubscore.exception.ConfigurationPartMissingException;
@@ -18,6 +22,10 @@ import java.util.logging.Level;
 
 public class PluginUtils {
 
+    public static HubsServer getHubsServer() {
+        return HubsCore.getInstance().server;
+    }
+
     public static String getVersion() {
         return HubsCore.getInstance().getDescription().getVersion();
     }
@@ -29,6 +37,22 @@ public class PluginUtils {
 
     public static FileConfiguration getStringsConfig() {
         return getConfigInFolder(HubsCore.getInstance().coreFolder, "strings");
+    }
+
+    public static File getFileToSaveParse(String fileName) {
+        return new File(getMenuFolder(), fileName + ".yml");
+    }
+
+    private static File getMenuFolder() {
+        File folder = new File(HubsCore.getInstance().getDataFolder(), "menu");
+        if (!folder.exists() && folder.mkdir()) {
+            logConsole("Menu folder recreated");
+        }
+        return folder;
+    }
+
+    public static boolean menuFileExists(String name) {
+        return (new File(getMenuFolder(), name + ".yml")).exists();
     }
 
     static FileConfiguration getConfigInFolder(File folder, String fileName) {
@@ -50,6 +74,10 @@ public class PluginUtils {
         return configuration;
     }
 
+    public static FileConfiguration getConfigInCoreFolder(String fileName) {
+        return getConfigInFolder(HubsCore.getInstance().coreFolder, fileName);
+    }
+
     public static Collection<CoreModule> getModules() {
         return HubsCore.getInstance().coreModules.values();
     }
@@ -68,6 +96,18 @@ public class PluginUtils {
         } catch (CommandNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void registerEventsOfListener(Listener listener) {
+        HubsCore.getInstance().getServer().getPluginManager().registerEvents(listener, HubsCore.getInstance());
+    }
+
+    public static void scheduleSyncDelayedTask(Runnable runnable) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(HubsCore.getInstance(), runnable);
+    }
+
+    public static BossBar createBossBar(String text, BarColor color, BarStyle style) {
+        return HubsCore.getInstance().getServer().createBossBar(text, color, style);
     }
 
     static void getMainThings() {
@@ -120,7 +160,6 @@ public class PluginUtils {
         }
         return res;
     }
-
 
     public static void logConsole(String info) {
         logConsole(Level.INFO, info);

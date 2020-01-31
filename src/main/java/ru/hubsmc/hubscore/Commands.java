@@ -51,7 +51,7 @@ public class Commands implements CommandExecutor, TabCompleter {
 
                     case "module":
                         if (args.length < 2) {
-                            sendNotEnoughArgsMessage(sender, args[0]);
+                            sendWrongUsageMessage(sender, "/hc module <modul_name>");
                             return true;
                         }
                         CoreModule coreModule = HubsCore.getInstance().getModuleByName(args[1]);

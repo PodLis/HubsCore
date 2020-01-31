@@ -2,106 +2,92 @@ package ru.hubsmc.hubscore.module.values.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
+import ru.hubsmc.hubscore.HubsCommand;
 import ru.hubsmc.hubscore.Permissions;
-import ru.hubsmc.hubscore.PluginUtils;
 import ru.hubsmc.hubscore.module.values.event.PayEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
 
 import static ru.hubsmc.hubscore.module.values.api.API.*;
-import static ru.hubsmc.hubscore.util.MessageUtils.*;
 
-public class PayCommand implements CommandExecutor, TabCompleter {
+public class PayCommand extends HubsCommand {
+
+    public PayCommand() {
+        super("pay", Permissions.PAY_NORMAL, true, 2);
+    }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onHubsCommand(CommandSender sender, Command command, String label, String[] args) {
+
+        Player player = (Player) sender;
+
+        int amount;
         try {
-            if (command.getName().equalsIgnoreCase("pay")) {
-
-                if (!(sender instanceof Player)) {
-                    sendPrefixMessage(sender, "Payer must be a player :)");
-                    return true;
-                }
-
-                Player player = (Player) sender;
-
-                if (!Permissions.PAY_NORMAL.senderHasPerm(player)) {
-                    sendNoPermMessage(player, label);
-                    return true;
-                }
-                if (args.length < 2) {
-                    sendNotEnoughArgsMessage(player, label);
-                    return true;
-                }
-
-                int amount;
-                try {
-                    amount = Integer.parseInt(args[1]);
-                } catch (NumberFormatException e) {
-                    sendPrefixMessage(player, "У нас нельзя платить буквами!");
-                    return true;
-                }
-
-                if (args[0].equals("*")) {
-                    if (!Permissions.PAY_ALL.senderHasPerm(player)) {
-                        sendPrefixMessage(player, "У тебя нет привилегии, чтобы платить всем игрокам!");
-                        return true;
-                    }
-                    sendPrefixMessage(player, "Сорян, автор плагина не успел доделать перевод всем игрокам...");
-                    return true;
-                }
-
-                Player receiver = Bukkit.getPlayer(args[0]);
-
-                if (receiver == null) {
-                    sendPrefixMessage(player, "Этот игрок не онлайн!");
-                    return true;
-                }
-
-                if (player.getUniqueId().toString().equals(receiver.getUniqueId().toString())) {
-                    sendPrefixMessage(player, "Ты не можешь заплатить самому себе!");
-                    return true;
-                }
-
-                PayEvent event = new PayEvent(player, receiver, amount);
-                Bukkit.getServer().getPluginManager().callEvent(event);
-                boolean isReceiverOnline;
-
-                if (!event.isCancelled()) {
-                    if (takeDollars(player, amount) == 0){
-                        sendPrefixMessage(player, "Ты хочешь перевести больше, чем у тебя есть!");
-                        return true;
-                    }
-                    isReceiverOnline = addDollars(receiver, amount);
-                } else {
-                    return true;
-                }
-
-                sendPrefixMessage(player, "Ты перевёл &e" + amount + "$&f игроку " + receiver.getName() + ". Теперь у тебя &e" + getDollars(player) + "$&f.");
-                if (isReceiverOnline && receiver.getPlayer() != null) {
-                    sendPrefixMessage(receiver.getPlayer(), "Игрок " + player.getName() + " перевёл тебе &e" + amount + "$&f. Теперь у тебя &e" + getDollars(receiver) + "$&f.");
-                }
-
-                return true;
-
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-            PluginUtils.logConsole(Level.WARNING, "Some troubles with command 'pay'.");
+            amount = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+            sendPlaceholderMessage(sender, "not-a-number");
+            return true;
         }
+
+        if (args[0].equals("*")) {
+            if (!Permissions.PAY_ALL.senderHasPerm(player)) {
+                sendPlaceholderMessage(sender, "not-to-all");
+                return true;
+            }
+            sendPlaceholderMessage(sender, "pay-all");
+            return true;
+        }
+
+        Player receiver = Bukkit.getPlayer(args[0]);
+
+        if (receiver == null) {
+            sendPlaceholderMessage(sender, "rec-not-online");
+            return true;
+        }
+
+        if (player.getUniqueId().toString().equals(receiver.getUniqueId().toString())) {
+            sendPlaceholderMessage(sender, "stop-self-licks");
+            return true;
+        }
+
+        PayEvent event = new PayEvent(player, receiver, amount);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        boolean isReceiverOnline;
+
+        if (!event.isCancelled()) {
+            if (takeDollars(player, amount) == 0) {
+                sendPlaceholderMessage(sender, "not-enough");
+                return true;
+            }
+            isReceiverOnline = addDollars(receiver, amount);
+        } else {
+            return true;
+        }
+
+        sendPlaceholderMessage(sender, "success-to-player",
+                "amount", String.valueOf(amount),
+                "rec_name", receiver.getName(),
+                "player_now", String.valueOf(getDollars(player))
+        );
+
+        if (isReceiverOnline && receiver.getPlayer() != null) {
+            sendPlaceholderMessage(sender, "not-a-number",
+                    "player_name", player.getName(),
+                    "amount", String.valueOf(amount),
+                    "rec_now", String.valueOf(getDollars(receiver))
+            );
+        }
+
         return true;
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onHubsComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> completionList = new ArrayList<>();
         String partOfCommand;
         List<String> cmds = new ArrayList<>();

@@ -2,7 +2,7 @@ package ru.hubsmc.hubscore;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class HubsPlugin extends JavaPlugin {
+public abstract class HubsPlugin extends JavaPlugin implements HubsServer {
 
     @Override
     public final void onEnable() {

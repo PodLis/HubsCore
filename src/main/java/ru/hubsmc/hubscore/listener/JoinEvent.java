@@ -13,6 +13,7 @@ public class JoinEvent implements Listener {
         for (CoreModule coreModule : PluginUtils.getModules()) {
             coreModule.onPlayerJoin(event.getPlayer());
         }
+        PluginUtils.getHubsServer().onPlayerJoin(event.getPlayer());
     }
 
 }

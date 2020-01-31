@@ -38,10 +38,6 @@ public class HubsValues extends CoreModule {
 
     private ValuesPlayerData specialDataStore;
 
-    public HubsValues(FileConfiguration configuration) {
-        this.configuration = configuration;
-    }
-
     @Override
     public void onEnable() {
         loadFiles();
@@ -100,7 +96,7 @@ public class HubsValues extends CoreModule {
     public boolean onCommandExecute(CommandSender sender, Command command, String label, String[] args) {
         if (args.length < 3)
         {
-            sendNotEnoughArgsMessage(sender, label + ": " + Arrays.toString(args));
+            sendWrongUsageMessage(sender, "/hc module HubsValues <sub_command>");
         }
 
         switch (args[3].toLowerCase()) {
@@ -108,12 +104,12 @@ public class HubsValues extends CoreModule {
             case "check":
 
                 if (!Permissions.VALUE_CHECK.senderHasPerm(sender)) {
-                    sendNoPermMessage(sender, label + ": " + Arrays.toString(args));
+                    sendNoPermMessage(sender, "check");
                     return true;
                 }
 
                 if (args.length < 5) {
-                    sendNotEnoughArgsMessage(sender, label + ": " + Arrays.toString(args));
+                    sendWrongUsageMessage(sender, "check <player> [economy]");
                     return true;
                 }
 
@@ -144,12 +140,12 @@ public class HubsValues extends CoreModule {
             case "remove":
 
                 if (!Permissions.VALUE_CHANGE.senderHasPerm(sender)) {
-                    sendNoPermMessage(sender, label + ": " + Arrays.toString(args));
+                    sendNoPermMessage(sender, args[3].toLowerCase());
                     return true;
                 }
 
                 if (args.length < 7) {
-                    sendNotEnoughArgsMessage(sender, label + ": " + Arrays.toString(args));
+                    sendWrongUsageMessage(sender, args[3].toLowerCase() + "<player> <economy> <amount>");
                     return true;
                 }
 
@@ -259,6 +255,7 @@ public class HubsValues extends CoreModule {
     }
 
     void loadFiles() {
+        configuration = PluginUtils.getConfigInCoreFolder("values");
         specialDataStore = new ValuesPlayerData();
         specialDataStore.prepareToWork("jdbc:mariadb://localhost/" + configuration.getString("sql.database"),
                 configuration.getString("sql.user"),

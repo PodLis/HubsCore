@@ -14,4 +14,8 @@ public class ServerUtils {
         Bukkit.getLogger().log(level, "[HubsCore] " + message);
     }
 
+    public static boolean playerIsOnline (String name) {
+        return Bukkit.getPlayer(name) != null;
+    }
+
 }

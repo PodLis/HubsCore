@@ -1,17 +1,27 @@
 package ru.hubsmc.hubscore.module.values.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import ru.hubsmc.hubscore.HubsCommand;
+import ru.hubsmc.hubscore.Permissions;
 
-import static ru.hubsmc.hubscore.util.MessageUtils.sendPrefixMessage;
+import java.util.List;
 
-public class TopCommand implements CommandExecutor {
+public class TopCommand extends HubsCommand {
+
+    public TopCommand() {
+        super("top", Permissions.TOP, false, 0);
+    }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        sendPrefixMessage(sender, "Автор ещё не закончил топ. Ждите...");
+    public boolean onHubsCommand(CommandSender sender, Command command, String label, String[] args) {
+        sendPlaceholderMessage(sender, "author-loh");
         return true;
+    }
+
+    @Override
+    public List<String> onHubsComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return null;
     }
 
 }

@@ -9,6 +9,7 @@ public enum Permissions {
     UTILS("hubscore.utils"),
     VALUE_CHECK("hubscore.value.check"),
     VALUE_CHANGE("hubscore.value.change"),
+    CHESTERTON_OPEN("hubscore.chesterton.open"),
     PAY_NORMAL("hubs.pay.normal"),
     PAY_ALL("hubs.pay.all"),
     CONVERT("hubs.convert"),

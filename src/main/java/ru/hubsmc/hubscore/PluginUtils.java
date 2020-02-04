@@ -10,6 +10,8 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.InvalidDescriptionException;
+import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
 import ru.hubsmc.hubscore.exception.CommandNotFoundException;
 import ru.hubsmc.hubscore.exception.ConfigurationPartMissingException;
@@ -31,8 +33,16 @@ public class PluginUtils {
     }
 
     static void reloadConfig() {
-        getMainThings();
+        reloadStrings();
         getModules().forEach(CoreModule::onReload);
+    }
+
+    static void reloadStrings() {
+        FileConfiguration stringsConfig = getConfigInCoreFolder("strings");
+        HubsCore.commonMessages = stringsConfig.getConfigurationSection("chat.common-messages");
+        HubsCore.CHAT_PREFIX = stringsConfig.getString("chat.prefixes.hubs");
+        HubsCore.SPACE_PREFIX = stringsConfig.getString("chat.prefixes.space");
+        HubsCore.CORE_PREFIX = stringsConfig.getString("chat.prefixes.hubscore");
     }
 
     public static FileConfiguration getStringsConfig() {
@@ -44,7 +54,7 @@ public class PluginUtils {
     }
 
     private static File getMenuFolder() {
-        File folder = new File(HubsCore.getInstance().getDataFolder(), "menu");
+        File folder = new File(HubsCore.getInstance().coreFolder, "menu");
         if (!folder.exists() && folder.mkdir()) {
             logConsole("Menu folder recreated");
         }
@@ -64,9 +74,7 @@ public class PluginUtils {
                 configuration.load(file);
                 HubsCore.getInstance().reloadConfig();
             } else {
-                HubsCore.getInstance().saveResource(fileName + ".yml", false);
-                configuration = YamlConfiguration.loadConfiguration(file);
-                logConsole("The '" + fileName + ".yml' file successfully created!");
+                throw new ConfigurationPartMissingException("File '" + fileName + ".yml' does not exist in '" + folder.getAbsolutePath() + "'");
             }
         } catch (Throwable e) {
             e.printStackTrace();
@@ -117,20 +125,17 @@ public class PluginUtils {
 
         // Get HubsServer plugin with in-config name
         String serverName = getExtremelyNeedConfigString(configuration, "server");
+        String version = getExtremelyNeedConfigString(configuration, "version");
         try {
-            if (Bukkit.getServer().getPluginManager().isPluginEnabled(serverName)) {
 
-                Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(serverName);
-                if (plugin instanceof HubsServer) {
-                    HubsCore.getInstance().server = (HubsServer) plugin;
-                } else {
-                    throw new HubsServerPluginMissingException("plugin with name \"" + serverName + "\" is not HubsServer plugin");
-                }
-
+            Plugin plugin = Bukkit.getServer().getPluginManager().loadPlugin(new File(HubsCore.getInstance().getDataFolder(), serverName + "-" + version + ".jar"));
+            if (plugin instanceof HubsServer) {
+                HubsCore.getInstance().setServer((HubsServer) plugin);
             } else {
-                throw new HubsServerPluginMissingException("plugin with name \"" + serverName + "\" is not enable in this server");
+                throw new HubsServerPluginMissingException("plugin with name \"" + serverName + "\" is not HubsServer plugin");
             }
-        } catch (HubsServerPluginMissingException e) {
+
+        } catch (HubsServerPluginMissingException | InvalidDescriptionException | InvalidPluginException e) {
             e.printStackTrace();
         }
 
@@ -138,9 +143,9 @@ public class PluginUtils {
         String path = getExtremelyNeedConfigString(configuration, "path");
         try {
             File mainFolder = new File(path);
-            if (!mainFolder.exists() || !mainFolder.mkdir())
+            if (!mainFolder.exists() || !mainFolder.isDirectory())
                 throw new IncorrectConfigurationException("folder with path \"" + path + "\" not exists or not a directory");
-            HubsCore.getInstance().mainFolder = mainFolder;
+            HubsCore.getInstance().setMainFolder(mainFolder);
         } catch (IncorrectConfigurationException e) {
             e.printStackTrace();
         }

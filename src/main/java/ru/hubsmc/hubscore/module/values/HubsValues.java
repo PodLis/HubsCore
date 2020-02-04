@@ -11,10 +11,7 @@ import ru.hubsmc.hubscore.CoreModule;
 import ru.hubsmc.hubscore.Permissions;
 import ru.hubsmc.hubscore.PluginUtils;
 import ru.hubsmc.hubscore.module.values.api.ValuesPlayerData;
-import ru.hubsmc.hubscore.module.values.commands.ConvertCommand;
-import ru.hubsmc.hubscore.module.values.commands.ManaCommand;
-import ru.hubsmc.hubscore.module.values.commands.PayCommand;
-import ru.hubsmc.hubscore.module.values.commands.TopCommand;
+import ru.hubsmc.hubscore.module.values.commands.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,6 +43,7 @@ public class HubsValues extends CoreModule {
         PluginUtils.setCommandExecutorAndTabCompleter("pay", new PayCommand());
         PluginUtils.setCommandExecutorAndTabCompleter("convert", new ConvertCommand());
         PluginUtils.setCommandExecutorAndTabCompleter("top", new TopCommand());
+        PluginUtils.setCommandExecutorAndTabCompleter("update", new UpdateCommand());
 
         online = true;
     }
@@ -99,7 +97,7 @@ public class HubsValues extends CoreModule {
             sendWrongUsageMessage(sender, "/hc module HubsValues <sub_command>");
         }
 
-        switch (args[3].toLowerCase()) {
+        switch (args[2].toLowerCase()) {
 
             case "check":
 

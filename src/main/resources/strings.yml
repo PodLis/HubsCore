@@ -50,9 +50,9 @@ chat:
     mana:
       usage: "/mana"
       header: "@H Твоя мана-статистика:"
-      mana: "@H Текущее значение маны: %mana%"
-      max: "@H Максимальное значение маны: %max%"
-      regen: "@H Регенерация маны в минуту: %regen%"
+      mana: "@S Текущее значение маны: %mana%"
+      max: "@S Максимальное значение маны: %max%"
+      regen: "@S Регенерация маны в минуту: %regen%"
     pay:
       usage: "/pay <игрок> <сумма_перевода>"
       not-a-number: "@H У нас нельзя платить буквами!"
@@ -66,6 +66,8 @@ chat:
     top:
       usage: "/top"
       author-loh: "@H Автор ещё не закончил топ. Ждите..."
+    update:
+      usage: "/update"
 
 console:
   core-prefix: "[HubsCore]"

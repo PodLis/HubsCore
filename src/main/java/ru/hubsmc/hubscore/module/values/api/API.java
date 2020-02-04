@@ -93,10 +93,13 @@ public class API {
     public static void loadPlayerData(Player player) {
         String UUID = player.getUniqueId().toString();
         if (ValuesPlayerData.checkDataExist(UUID)) {
-            setManaToMap(player, Math.min(loadValue(UUID, "mana"), loadValue(UUID, "max")));
-            setMaxManaToMap(player, loadValue(UUID, "max"));
-            setRegenManaToMap(player, loadValue(UUID, "regen"));
-            setDollarsToMap(player, loadValue(UUID, "dollars"));
+            loadPlayerValueSet(
+                    player,
+                    loadValue(UUID, "dollars"),
+                    Math.min(loadValue(UUID, "mana"), loadValue(UUID, "max")),
+                    loadValue(UUID, "max"),
+                    loadValue(UUID, "regen")
+            );
         } else {
             createAccount(player.getUniqueId().toString(), player);
         }
@@ -126,7 +129,8 @@ public class API {
      */
     public static void increaseAllOnlineMana() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            setManaToMap(player, Math.min(getManaFromMap(player) + getRegenManaFromMap(player), getMaxManaFromMap(player)));
+            if (isPlayerOnline(player))
+                setManaToMap(player, Math.min(getManaFromMap(player) + getRegenManaFromMap(player), getMaxManaFromMap(player)));
         }
     }
 

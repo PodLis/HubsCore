@@ -57,6 +57,11 @@ public class HubsChesterton extends CoreModule {
         String[] args = new String[oldArgs.length - 2];
         System.arraycopy(oldArgs, 2, args, 0, args.length);
 
+        if (args.length < 1) {
+            sendWrongUsageMessage(sender, "/hc module HubsValues <sub_command>");
+            return true;
+        }
+
         if (args[0].equalsIgnoreCase("open")) {
             if (!Permissions.CHESTERTON_OPEN.senderHasPerm(sender)) {
                 sendNoPermMessage(sender, args[0]);

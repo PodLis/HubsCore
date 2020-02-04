@@ -24,23 +24,23 @@ public class MessageUtils {
 
 
     public static void sendNoPermMessage(CommandSender sender, String command) {
-        sendCommonMessage(sender, "no-perm", "%command%", command);
+        sendCommonMessage(sender, "no-perm", "command", command);
     }
 
     public static void sendUnknownCommandMessage(CommandSender sender, String command) {
-        sendCommonMessage(sender, "unknown-command", "%command%", command);
+        sendCommonMessage(sender, "unknown-command", "command", command);
     }
 
     public static void sendWrongUsageMessage(CommandSender sender, String usage) {
-        sendCommonMessage(sender, "wrong-usage", "%usage%", usage);
+        sendCommonMessage(sender, "wrong-usage", "usage", usage);
     }
 
     public static void sendMustBePlayerMessage(CommandSender sender, String command) {
-        sendCommonMessage(sender, "must-be-a-player", "%command%", command);
+        sendCommonMessage(sender, "must-be-a-player", "command", command);
     }
 
     public static void sendPlayerMustBeOnlineMessage(CommandSender sender, String player, String command) {
-        sendCommonMessage(sender, "must-be-online", "%player%", player, "%command%", command);
+        sendCommonMessage(sender, "must-be-online", "player", player, "command", command);
     }
 
     public static void sendUnknownErrorMessage(CommandSender sender) {

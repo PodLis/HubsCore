@@ -3,7 +3,7 @@ version: ${project.version}
 main: ru.hubsmc.hubscore.HubsCore
 api-version: 1.13
 prefix: HubsCore
-load: STARTUP
+load: POSTWORLD
 authors: [Rosenboum]
 description: Core plugin for HUBS
 website: hubsmc.ru
@@ -29,6 +29,12 @@ commands:
     description: The dollars top command
     usage: <command>
     permission: "hubs.top"
+  mana:
+    description: The mana command
+    usage: <command>
+  update:
+    description: The update command
+    usage: <command>
 
 permissions:
   hubscore.*:

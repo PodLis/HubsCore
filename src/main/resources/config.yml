@@ -2,3 +2,4 @@
 
 path: "/etc/server/z_config"
 server: "HubsLobby"
+version: "0.1"

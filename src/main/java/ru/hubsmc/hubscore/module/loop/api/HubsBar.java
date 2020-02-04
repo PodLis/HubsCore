@@ -5,7 +5,6 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import ru.hubsmc.hubscore.PluginUtils;
-import ru.hubsmc.hubscore.module.loop.HubsLoop;
 
 import java.util.Collection;
 
@@ -13,7 +12,7 @@ public class HubsBar implements ToPlayerSendable{
 
     private BossBar bossBar;
 
-    public HubsBar(HubsLoop plugin, String text, BarColor color, BarStyle style, double progress) {
+    public HubsBar(String text, BarColor color, BarStyle style, double progress) {
         bossBar = PluginUtils.createBossBar(text, color, style);
         bossBar.setProgress(progress);
     }

@@ -95,7 +95,11 @@ public class ValuesPlayerData extends PlayerData {
     static void createAccount(String UUID, Player player) {
         createAccount(UUID);
         update(UUID, C_PLAYER, player.getDisplayName());
-        valueSetMap.put(player, new ValueSet(START_DOLLARS, START_MANA, START_MAX, START_REGEN));
+        loadPlayerValueSet(player, START_DOLLARS, START_MANA, START_MAX, START_REGEN);
+    }
+
+    static void loadPlayerValueSet(Player player, int dollars, int mana, int max, int regen) {
+        valueSetMap.put(player, new ValueSet(dollars, mana, max, regen));
     }
 
     private static void updateIncreaseAll() {

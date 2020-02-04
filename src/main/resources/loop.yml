@@ -16,7 +16,7 @@ boss-bars:
 
   bars:
     1:
-      colorFALSE: BLUE
+      color: BLUE
       segmented: SOLID
       progress: 1
       text: '&9&l✔&5&l✔&f &bПосмотри, какие вещи есть у донатеров &d&l/showkit&f &5&l✔&9&l✔'

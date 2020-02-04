@@ -30,13 +30,23 @@ public class Commands implements CommandExecutor, TabCompleter {
                 }
                 switch (args[0].toLowerCase()) {
 
-                    case "reload":
+                    case "reload-all":
+                    case "r":
                         if (!Permissions.RELOAD.senderHasPerm(sender)) {
                             sendNoPermMessage(sender, args[0]);
                             return true;
                         }
                         PluginUtils.reloadConfig();
                         sendPrefixMessage(sender, "Плагин успешно перезагружен");
+                        return true;
+
+                    case "reload-strings":
+                        if (!Permissions.RELOAD.senderHasPerm(sender)) {
+                            sendNoPermMessage(sender, args[0]);
+                            return true;
+                        }
+                        PluginUtils.reloadStrings();
+                        sendPrefixMessage(sender, "strings успешно перезагружены");
                         return true;
 
                     case "info":
@@ -51,7 +61,7 @@ public class Commands implements CommandExecutor, TabCompleter {
 
                     case "module":
                         if (args.length < 2) {
-                            sendWrongUsageMessage(sender, "/hc module <modul_name>");
+                            sendWrongUsageMessage(sender, "/hc module <module_name>");
                             return true;
                         }
                         CoreModule coreModule = HubsCore.getInstance().getModuleByName(args[1]);
@@ -85,7 +95,7 @@ public class Commands implements CommandExecutor, TabCompleter {
 
         switch (args.length) {
             case 1:
-                cmds = new ArrayList<>(Arrays.asList("reload", "info"));
+                cmds = new ArrayList<>(Arrays.asList("reload-all", "reload-strings", "info", "module"));
                 partOfCommand = args[0];
 
                 StringUtil.copyPartialMatches(partOfCommand, cmds, completionList);

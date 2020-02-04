@@ -55,6 +55,9 @@ public class HubsLoop extends CoreModule {
 
     @Override
     public void onReload() {
+        for (HubsBar bar : bossBars) {
+            bar.clean();
+        }
         loadFiles();
     }
 
@@ -135,13 +138,13 @@ public class HubsLoop extends CoreModule {
         playerFeedCommand = new PlayerCommand(configuration.getString("periodic-feed.cmd-to-player"));
 
         //boss-bars
-        String[] bossTexts = ConfigUtils.getStrings(configuration.getConfigurationSection("boss-bars.bars"), "color");
+        String[] bossTexts = ConfigUtils.getStrings(configuration.getConfigurationSection("boss-bars.bars"), "text");
         String[] bossColors = ConfigUtils.getStrings(configuration.getConfigurationSection("boss-bars.bars"), "color");
         String[] bossStyles = ConfigUtils.getStrings(configuration.getConfigurationSection("boss-bars.bars"), "segmented");
         double[] bossProgresses = ConfigUtils.getDoubles(configuration.getConfigurationSection("boss-bars.bars"), "progress");
         bossBars = new ArrayList<>();
         for (int i = 0; i < bossTexts.length; i++) {
-            bossBars.add(new HubsBar(this,
+            bossBars.add(new HubsBar(
                     replaceSymbolsAndNull(bossTexts[i]),
                     BarColor.valueOf(bossColors[i]),
                     BarStyle.valueOf(bossStyles[i]),

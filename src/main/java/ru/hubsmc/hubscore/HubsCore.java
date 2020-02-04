@@ -48,11 +48,7 @@ public final class HubsCore extends JavaPlugin {
         cycleMin = 0;
 
         // strings.yml loads
-        FileConfiguration stringsConfig = getConfigInFolder(coreFolder, "strings");
-        commonMessages = stringsConfig.getConfigurationSection("chat.common-messages");
-        CHAT_PREFIX = stringsConfig.getString("chat.prefixes.hubs");
-        SPACE_PREFIX = stringsConfig.getString("chat.prefixes.space");
-        CORE_PREFIX = stringsConfig.getString("chat.prefixes.hubscore");
+        reloadStrings();
 
         // module enabling
         coreModules = new HashMap<>();
@@ -137,6 +133,14 @@ public final class HubsCore extends JavaPlugin {
         }
 
         return config;
+    }
+
+    public void setMainFolder(File mainFolder) {
+        this.mainFolder = mainFolder;
+    }
+
+    public void setServer(HubsServer server) {
+        this.server = server;
     }
 
 }

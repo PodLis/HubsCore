@@ -7,21 +7,18 @@ import ru.hubsmc.hubscore.HubsCommand;
 
 import java.util.List;
 
-import static ru.hubsmc.hubscore.module.values.api.API.*;
+import static ru.hubsmc.hubscore.module.values.api.API.loadPlayerData;
 
-public class ManaCommand extends HubsCommand {
+public class UpdateCommand extends HubsCommand {
 
-    public ManaCommand() {
-        super("mana", null, true, 0);
+    public UpdateCommand() {
+        super("update", null, true, 0);
     }
 
     @Override
     public boolean onHubsCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player) sender;
-        sendPlaceholderMessage(player, "header");
-        sendPlaceholderMessage(player, "mana", "mana", String.valueOf(getMana(player)));
-        sendPlaceholderMessage(player, "max", "max", String.valueOf(getMaxMana(player)));
-        sendPlaceholderMessage(player, "regen", "regen", String.valueOf(getRegenMana(player)));
+        loadPlayerData(player);
         return true;
     }
 

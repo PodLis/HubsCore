@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import ru.hubsmc.hubscore.exception.ConfigurationPartMissingException;
 import ru.hubsmc.hubscore.util.MessageUtils;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,8 +33,16 @@ public abstract class HubsCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public final boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        namespace = MessageUtils.getCommandNamespace(name);
-        usage = namespace.getString("usage");
+        try {
+            namespace = MessageUtils.getCommandNamespace(name);
+            if (namespace == null) {
+                throw new ConfigurationPartMissingException("usage of the HubsCommand '" + name + "' is missing in strings.yml");
+            }
+            usage = namespace.getString("usage");
+        } catch (ConfigurationPartMissingException e) {
+            e.printStackTrace();
+        }
+
         try {
             if (command.getName().equalsIgnoreCase(name)) {
 

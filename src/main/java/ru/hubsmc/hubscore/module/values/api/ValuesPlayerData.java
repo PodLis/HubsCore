@@ -1,13 +1,12 @@
 package ru.hubsmc.hubscore.module.values.api;
 
 import org.bukkit.entity.Player;
+import ru.hubsmc.hubscore.PluginUtils;
 import ru.hubsmc.hubscore.module.values.PlayerData;
 import ru.hubsmc.hubscore.module.values.HubsValues;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ValuesPlayerData extends PlayerData {
 
@@ -25,11 +24,8 @@ public class ValuesPlayerData extends PlayerData {
     private static final int START_DOLLARS = 0;
     private static final int START_HUBIXES = 0;
 
-    private static Map<Player, ValueSet> valueSetMap;
-
     public ValuesPlayerData() {
         super(TABLE_NAME, C_PLAYER, C_DOLLARS, C_HUBIXES, C_MANA, C_MAX, C_REGEN);
-        valueSetMap = new HashMap<>();
     }
 
     public void prepareToWork(String url, String user, String password) {
@@ -37,39 +33,39 @@ public class ValuesPlayerData extends PlayerData {
     }
 
     static boolean isPlayerOnline(Player player) {
-        return valueSetMap.containsKey(player);
+        return PluginUtils.isPlayerOnHubs(player);
     }
 
     static int getManaFromMap(Player player) {
-        return valueSetMap.get(player).getMana();
+        return PluginUtils.getHubsPlayer(player).getMana();
     }
 
     static int getMaxManaFromMap(Player player) {
-        return valueSetMap.get(player).getMax();
+        return PluginUtils.getHubsPlayer(player).getMax();
     }
 
     static int getRegenManaFromMap(Player player) {
-        return valueSetMap.get(player).getRegen();
+        return PluginUtils.getHubsPlayer(player).getRegen();
     }
 
     static int getDollarsFromMap(Player player) {
-        return valueSetMap.get(player).getDollars();
+        return PluginUtils.getHubsPlayer(player).getDollars();
     }
 
     static void setManaToMap(Player player, int amount) {
-        valueSetMap.get(player).setMana(amount);
+        PluginUtils.getHubsPlayer(player).setMana(amount);
     }
 
     static void setMaxManaToMap(Player player, int amount) {
-        valueSetMap.get(player).setMax(amount);
+        PluginUtils.getHubsPlayer(player).setMax(amount);
     }
 
     static void setRegenManaToMap(Player player, int amount) {
-        valueSetMap.get(player).setRegen(amount);
+        PluginUtils.getHubsPlayer(player).setRegen(amount);
     }
 
     static void setDollarsToMap(Player player, int amount) {
-        valueSetMap.get(player).setDollars(amount);
+        PluginUtils.getHubsPlayer(player).setDollars(amount);
     }
 
 
@@ -95,11 +91,15 @@ public class ValuesPlayerData extends PlayerData {
     static void createAccount(String UUID, Player player) {
         createAccount(UUID);
         update(UUID, C_PLAYER, player.getDisplayName());
-        loadPlayerValueSet(player, START_DOLLARS, START_MANA, START_MAX, START_REGEN);
+        PluginUtils.loadPlayerAsHubsPlayer(player, START_DOLLARS, START_MANA, START_MAX, START_REGEN);
+    }
+
+    static void recreateAccount(Player player, int dollars, int mana, int max, int regen) {
+        PluginUtils.loadPlayerAsHubsPlayer(player, dollars, mana, max, regen);
     }
 
     static void loadPlayerValueSet(Player player, int dollars, int mana, int max, int regen) {
-        valueSetMap.put(player, new ValueSet(dollars, mana, max, regen));
+        PluginUtils.getHubsPlayer(player).setValues(dollars, mana, max, regen);
     }
 
     private static void updateIncreaseAll() {

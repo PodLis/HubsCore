@@ -18,4 +18,6 @@ public interface HubsServer {
 
     void onSchedule();
 
+    String getStringData(String key);
+
 }

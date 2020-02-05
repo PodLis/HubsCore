@@ -4,10 +4,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import ru.hubsmc.hubscore.HubsCommand;
+import ru.hubsmc.hubscore.PluginUtils;
 
 import java.util.List;
-
-import static ru.hubsmc.hubscore.module.values.api.API.loadPlayerData;
 
 public class UpdateCommand extends HubsCommand {
 
@@ -18,7 +17,7 @@ public class UpdateCommand extends HubsCommand {
     @Override
     public boolean onHubsCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player) sender;
-        loadPlayerData(player);
+        PluginUtils.getHubsPlayer(player).updateNormalVars();
         return true;
     }
 

@@ -41,6 +41,7 @@ public class Commands implements CommandExecutor, TabCompleter {
                         return true;
 
                     case "reload-strings":
+                    case "rs":
                         if (!Permissions.RELOAD.senderHasPerm(sender)) {
                             sendNoPermMessage(sender, args[0]);
                             return true;

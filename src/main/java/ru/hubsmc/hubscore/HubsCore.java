@@ -3,10 +3,12 @@ package ru.hubsmc.hubscore;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import ru.hubsmc.hubscore.listener.JoinEvent;
 import ru.hubsmc.hubscore.listener.LeaveEvent;
+import ru.hubsmc.hubscore.listener.SuccessLoginEvent;
 import ru.hubsmc.hubscore.module.chesterton.HubsChesterton;
 import ru.hubsmc.hubscore.module.essentials.HubsEssentials;
 import ru.hubsmc.hubscore.module.loop.HubsLoop;
@@ -27,6 +29,7 @@ public final class HubsCore extends JavaPlugin {
     public static String SPACE_PREFIX;
     public static String CORE_PREFIX;
     public static ConfigurationSection commonMessages;
+    public static boolean LOBBY_LIKE;
 
     private static HubsCore instance;
 
@@ -37,6 +40,8 @@ public final class HubsCore extends JavaPlugin {
     HubsServer server;
     File mainFolder, coreFolder;
 
+    private Map<Player, HubsPlayer> hubsPlayerMap;
+
     @Override
     public void onEnable() {
 
@@ -46,6 +51,7 @@ public final class HubsCore extends JavaPlugin {
         coreFolder = new File(mainFolder, "HubsCore");
         mainScheduler = getServer().getScheduler();
         cycleMin = 0;
+        hubsPlayerMap = new HashMap<>();
 
         // strings.yml loads
         reloadStrings();
@@ -61,7 +67,11 @@ public final class HubsCore extends JavaPlugin {
         }
 
         // register basic events and basic commands
-        registerEventsOfListener(new JoinEvent());
+        if (LOBBY_LIKE) {
+            registerEventsOfListener(new SuccessLoginEvent());
+        } else {
+            registerEventsOfListener(new JoinEvent());
+        }
         registerEventsOfListener(new LeaveEvent());
         setCommandExecutorAndTabCompleter("hubscore", new Commands());
         setCommandExecutorAndTabCompleter("utils", new UtilsCommand());
@@ -141,6 +151,22 @@ public final class HubsCore extends JavaPlugin {
 
     public void setServer(HubsServer server) {
         this.server = server;
+    }
+
+    HubsPlayer getHubsPlayer(Player player) {
+        return hubsPlayerMap.getOrDefault(player, null);
+    }
+
+    void setHubsPlayer(Player player, int dollars, int mana, int max, int regen) {
+        hubsPlayerMap.put(player, new HubsPlayer(player, dollars, mana, max, regen));
+    }
+
+    void removeHubsPlayer(Player player) {
+        hubsPlayerMap.remove(player).onRemove();
+    }
+
+    boolean isPlayerOnHubs(Player player) {
+        return hubsPlayerMap.containsKey(player);
     }
 
 }

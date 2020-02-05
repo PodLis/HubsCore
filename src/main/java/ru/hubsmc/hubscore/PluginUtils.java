@@ -9,14 +9,17 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scoreboard.Scoreboard;
 import ru.hubsmc.hubscore.exception.CommandNotFoundException;
 import ru.hubsmc.hubscore.exception.ConfigurationPartMissingException;
 import ru.hubsmc.hubscore.exception.HubsServerPluginMissingException;
 import ru.hubsmc.hubscore.exception.IncorrectConfigurationException;
+import ru.hubsmc.hubscore.module.loop.board.App;
 
 import java.io.File;
 import java.util.Collection;
@@ -63,6 +66,22 @@ public class PluginUtils {
 
     public static boolean menuFileExists(String name) {
         return (new File(getMenuFolder(), name + ".yml")).exists();
+    }
+
+    public static void loadPlayerAsHubsPlayer(Player player, int dollars, int mana, int max, int regen) {
+        HubsCore.getInstance().setHubsPlayer(player, dollars, mana, max, regen);
+    }
+
+    public static void unloadHubsPlayer(Player player) {
+        HubsCore.getInstance().removeHubsPlayer(player);
+    }
+
+    public static boolean isPlayerOnHubs(Player player) {
+        return HubsCore.getInstance().isPlayerOnHubs(player);
+    }
+
+    public static HubsPlayer getHubsPlayer(Player player) {
+        return HubsCore.getInstance().getHubsPlayer(player);
     }
 
     static FileConfiguration getConfigInFolder(File folder, String fileName) {
@@ -118,6 +137,14 @@ public class PluginUtils {
         return HubsCore.getInstance().getServer().createBossBar(text, color, style);
     }
 
+    public static Scoreboard createScoreboard() {
+        return HubsCore.getInstance().getServer().getScoreboardManager().getNewScoreboard();
+    }
+
+    public static void runAppTaskTimer(App app) {
+        app.runTaskTimer(HubsCore.getInstance(), 1L, 2L);
+    }
+
     static void getMainThings() {
 
         // Get supporting configuration in some_server/plugins/HubsCore/config.yml to get HubsServer name and mainConfig path
@@ -146,6 +173,18 @@ public class PluginUtils {
             if (!mainFolder.exists() || !mainFolder.isDirectory())
                 throw new IncorrectConfigurationException("folder with path \"" + path + "\" not exists or not a directory");
             HubsCore.getInstance().setMainFolder(mainFolder);
+        } catch (IncorrectConfigurationException e) {
+            e.printStackTrace();
+        }
+
+        // Get an important constant
+        String lobbyLike = getExtremelyNeedConfigString(configuration, "is-lobby-like");
+        try {
+            try {
+                HubsCore.LOBBY_LIKE = Boolean.parseBoolean(lobbyLike);
+            } catch (NumberFormatException e) {
+                throw new IncorrectConfigurationException("'" + lobbyLike + "' in 'is-lobby-like' is not a boolean value");
+            }
         } catch (IncorrectConfigurationException e) {
             e.printStackTrace();
         }

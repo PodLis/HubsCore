@@ -5,17 +5,20 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
 import ru.hubsmc.hubscore.CoreModule;
 import ru.hubsmc.hubscore.PluginUtils;
+import ru.hubsmc.hubscore.exception.ConfigurationPartMissingException;
 import ru.hubsmc.hubscore.module.loop.api.*;
+import ru.hubsmc.hubscore.module.loop.board.App;
+import ru.hubsmc.hubscore.module.loop.board.ScoreboardHolder;
 import ru.hubsmc.hubscore.util.ConfigUtils;
 import ru.hubsmc.hubscore.util.JsonConverter;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static ru.hubsmc.hubscore.util.StringUtils.replaceSymbolsAndNull;
 
@@ -38,6 +41,9 @@ public class HubsLoop extends CoreModule {
     private ArrayList<ActionBar> actionBars;
     private ArrayList<ChatMessage> chatMessages;
 
+    public static Scoreboard EMPTY_BOARD;
+    public static App app;
+
     private PlayerCommand playerFeedCommand;
     private String consoleFeedCommand;
 
@@ -48,16 +54,12 @@ public class HubsLoop extends CoreModule {
 
     @Override
     public void onDisable() {
-        for (HubsBar bar : bossBars) {
-            bar.clean();
-        }
+        unloadFiles();
     }
 
     @Override
     public void onReload() {
-        for (HubsBar bar : bossBars) {
-            bar.clean();
-        }
+        unloadFiles();
         loadFiles();
     }
 
@@ -114,6 +116,13 @@ public class HubsLoop extends CoreModule {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         return null;
+    }
+
+    private void unloadFiles() {
+        app.cancel();
+        for (HubsBar bar : bossBars) {
+            bar.clean();
+        }
     }
 
     private void loadFiles() {
@@ -187,6 +196,20 @@ public class HubsLoop extends CoreModule {
 
             }
         }
+
+        // scoreboards
+        EMPTY_BOARD = PluginUtils.createScoreboard();
+        ConfigurationSection section;
+        try {
+            section = configuration.getConfigurationSection("board");
+            if (section == null) {
+                throw new ConfigurationPartMissingException("'board' section is not exist in 'loop.yml'");
+            }
+            app = new App(section);
+        } catch (ConfigurationPartMissingException e) {
+            e.printStackTrace();
+        }
+        PluginUtils.runAppTaskTimer(app);
 
     }
 

@@ -5,9 +5,6 @@ sql:
   user: Minecraft
   password: qwerty123
 
-# load values on player join or not. turn on if this server is not a lobby (authorise plugin missing)
-load-values-on-join: false
-
 economy-types:
   - "hubixes"
   - "dollars"

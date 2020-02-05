@@ -3,6 +3,7 @@ package ru.hubsmc.hubscore.module.values.api;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import ru.hubsmc.hubscore.PluginUtils;
 
 import static ru.hubsmc.hubscore.module.values.api.ValuesPlayerData.*;
 
@@ -87,13 +88,13 @@ public class API {
     }
 
     /**
-     * Load player mana, max, regen, dollars from database to map
+     * Load player mana, max, regen, dollars from database to map and create a HubsPlayer
      * @param player the player to load
      */
     public static void loadPlayerData(Player player) {
         String UUID = player.getUniqueId().toString();
         if (ValuesPlayerData.checkDataExist(UUID)) {
-            loadPlayerValueSet(
+            recreateAccount(
                     player,
                     loadValue(UUID, "dollars"),
                     Math.min(loadValue(UUID, "mana"), loadValue(UUID, "max")),
@@ -103,6 +104,21 @@ public class API {
         } else {
             createAccount(player.getUniqueId().toString(), player);
         }
+    }
+
+    /**
+     * Load player mana, max, regen, dollars from database to map
+     * @param player the player to load
+     */
+    public static void reloadPlayerData(Player player) {
+        String UUID = player.getUniqueId().toString();
+        loadPlayerValueSet(
+                player,
+                loadValue(UUID, "dollars"),
+                Math.min(loadValue(UUID, "mana"), loadValue(UUID, "max")),
+                loadValue(UUID, "max"),
+                loadValue(UUID, "regen")
+        );
     }
 
     /**
@@ -482,6 +498,8 @@ public class API {
      */
     public static void setHubixes(OfflinePlayer offlinePlayer, int amount) {
         saveValue(offlinePlayer.getUniqueId().toString(), "hubixes", amount);
+        if (offlinePlayer instanceof Player)
+            PluginUtils.getHubsPlayer((Player) offlinePlayer).updateNormalVars();
     }
 
     /**
@@ -492,6 +510,8 @@ public class API {
     public static void addHubixes(OfflinePlayer offlinePlayer, int amount) {
         String UUID = offlinePlayer.getUniqueId().toString();
         saveValue(UUID, "hubixes", amount + loadValue(UUID, "hubixes"));
+        if (offlinePlayer instanceof Player)
+            PluginUtils.getHubsPlayer((Player) offlinePlayer).updateNormalVars();
     }
 
     /**
@@ -505,6 +525,8 @@ public class API {
     public static void removeHubixes(OfflinePlayer offlinePlayer, int amount) {
         String UUID = offlinePlayer.getUniqueId().toString();
         saveValue(UUID, "hubixes", Math.max(loadValue(UUID, "hubixes") - amount, 0));
+        if (offlinePlayer instanceof Player)
+            PluginUtils.getHubsPlayer((Player) offlinePlayer).updateNormalVars();
     }
 
     /**
@@ -520,6 +542,8 @@ public class API {
         String UUID = offlinePlayer.getUniqueId().toString();
         if (loadValue(UUID, "hubixes") >= amount) {
             saveValue(UUID, "hubixes", loadValue(UUID, "hubixes") - amount);
+            if (offlinePlayer instanceof Player)
+                PluginUtils.getHubsPlayer((Player) offlinePlayer).updateNormalVars();
             return true;
         }
         return false;

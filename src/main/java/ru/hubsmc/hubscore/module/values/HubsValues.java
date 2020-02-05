@@ -8,6 +8,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import ru.hubsmc.hubscore.CoreModule;
+import ru.hubsmc.hubscore.HubsCore;
 import ru.hubsmc.hubscore.Permissions;
 import ru.hubsmc.hubscore.PluginUtils;
 import ru.hubsmc.hubscore.module.values.api.ValuesPlayerData;
@@ -27,7 +28,6 @@ public class HubsValues extends CoreModule {
     public static int START_REGEN;
     public static int OFFLINE_COEFFICIENT;
     public static int HUBIXES_TO_DOLLARS_RATE;
-    public static boolean LOAD_VALUES_ON_JOIN;
 
     private static boolean online;
 
@@ -66,14 +66,14 @@ public class HubsValues extends CoreModule {
         loadFiles();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            loadPlayerData(player);
+            reloadPlayerData(player);
         }
     }
 
     @Override
     public void onPlayerJoin(Player player) {
-        if (LOAD_VALUES_ON_JOIN) {
-            loadPlayerData(player);
+        if (!HubsCore.LOBBY_LIKE) {
+            reloadPlayerData(player);
         }
     }
 
@@ -95,6 +95,7 @@ public class HubsValues extends CoreModule {
         if (args.length < 3)
         {
             sendWrongUsageMessage(sender, "/hc module HubsValues <sub_command>");
+            return true;
         }
 
         switch (args[2].toLowerCase()) {
@@ -106,13 +107,13 @@ public class HubsValues extends CoreModule {
                     return true;
                 }
 
-                if (args.length < 5) {
+                if (args.length < 4) {
                     sendWrongUsageMessage(sender, "check <player> [economy]");
                     return true;
                 }
 
-                if (args.length == 5) {
-                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[4]);
+                if (args.length == 4) {
+                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[3]);
                     if (checkDataExist(offlinePlayer.getUniqueId().toString())) {
                         sendPrefixMessage(sender, "Player's values:");
                         for (String type : configuration.getStringList("economy-types")) {
@@ -124,8 +125,8 @@ public class HubsValues extends CoreModule {
                     return true;
                 }
 
-                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[4]);
-                String valueType = args[5].toLowerCase();
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[3]);
+                String valueType = args[4].toLowerCase();
                 if (checkDataExist(offlinePlayer.getUniqueId().toString()) && configuration.getStringList("economy-types").contains(valueType)) {
                     sendMessage(sender, configuration.getString(valueType + ".name") + ": " + configuration.getString(valueType + ".color") + getValueFromName(offlinePlayer, valueType));
                     return true;
@@ -242,7 +243,7 @@ public class HubsValues extends CoreModule {
                 cmds.add("" + ((int)Math.pow(10, i)));
                 cmds.add("" + ((int)Math.pow(10, i))*5);
             }
-            partOfCommand = args[1];
+            partOfCommand = args[3];
 
             StringUtil.copyPartialMatches(partOfCommand, cmds, completionList);
             Collections.sort(completionList);
@@ -263,11 +264,11 @@ public class HubsValues extends CoreModule {
         START_REGEN = configuration.getInt("regen.start_amount");
         OFFLINE_COEFFICIENT = configuration.getInt("regen.offline_coefficient");
         HUBIXES_TO_DOLLARS_RATE = configuration.getInt("dollars.rate");
-        LOAD_VALUES_ON_JOIN = configuration.getBoolean("load-values-on-join");
 
         // small protection, if somebody (once) will join on the server before plugin completely loaded
         for (Player player : Bukkit.getOnlinePlayers()) {
-            loadPlayerData(player);
+            if (PluginUtils.isPlayerOnHubs(player))
+                reloadPlayerData(player);
         }
     }
 

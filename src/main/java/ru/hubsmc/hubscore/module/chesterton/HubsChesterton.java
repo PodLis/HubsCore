@@ -58,7 +58,7 @@ public class HubsChesterton extends CoreModule {
         System.arraycopy(oldArgs, 2, args, 0, args.length);
 
         if (args.length < 1) {
-            sendWrongUsageMessage(sender, "/hc module HubsValues <sub_command>");
+            sendWrongUsageMessage(sender, "/hc module HubsChesterton <sub_command>");
             return true;
         }
 

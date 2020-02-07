@@ -13,6 +13,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.StringUtil;
@@ -144,9 +145,27 @@ public class UtilsCommand extends HubsCommand {
 
                 return true;
 
-            case "rename":
-                sendPlaceholderMessage(sender, "rename");
+            case "broadcast":
+            case "bc": {
+                String[] newArgs = new String[args.length - 1];
+                System.arraycopy(args, 1, newArgs, 0, newArgs.length);
+                ServerUtils.broadcastMessage(StringUtils.replaceColor(String.join(" ", newArgs)));
                 return true;
+            }
+
+            case "rename": {
+                Player player1 = (Player) sender;
+                ItemMeta itemMeta = player1.getInventory().getItemInMainHand().getItemMeta();
+                String[] newArgs = new String[args.length - 1];
+                System.arraycopy(args, 1, newArgs, 0, newArgs.length);
+                if (itemMeta == null) {
+                    sendPlaceholderMessage(sender, "rename");
+                    return true;
+                }
+                itemMeta.setDisplayName(StringUtils.replaceColor(String.join(" ", newArgs)));
+                player1.getInventory().getItemInMainHand().setItemMeta(itemMeta);
+                return true;
+            }
 
             default:
                 sendUnknownCommandMessage(sender, args[0]);
@@ -163,7 +182,7 @@ public class UtilsCommand extends HubsCommand {
 
         switch (args.length) {
             case 1:
-                cmds = new ArrayList<>(Arrays.asList("parse", "rename"));
+                cmds = new ArrayList<>(Arrays.asList("parse", "rename", "broadcast"));
                 partOfCommand = args[0];
 
                 StringUtil.copyPartialMatches(partOfCommand, cmds, completionList);

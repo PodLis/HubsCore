@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import ru.hubsmc.hubscore.PluginUtils;
 
 import static ru.hubsmc.hubscore.module.values.api.API.*;
+import static ru.hubsmc.hubscore.util.StringUtils.replaceColor;
 
 public class ScoreboardHolder {
 
@@ -22,7 +23,7 @@ public class ScoreboardHolder {
         vMana = "" + mana;
         vMax = "" + max;
         vRegen = "" + regen;
-        vServer = "" + PluginUtils.getHubsServer().getStringData("tablo");
+        vServer = "" + replaceColor(PluginUtils.getHubsServer().getStringData("tablo"));
 
         this.player = player;
 
@@ -70,7 +71,7 @@ public class ScoreboardHolder {
         vMana = "" + getMana(player);
         vMax = "" + getMaxMana(player);
         vRegen = "" + getRegenMana(player);
-        vServer = "" + PluginUtils.getHubsServer().getStringData("tablo");
+        vServer = "" + replaceColor(PluginUtils.getHubsServer().getStringData("tablo"));
     }
 
     public void updateCustomValues(String v1, String v2, String v3, String v4) {

@@ -1,4 +1,4 @@
-package ru.hubsmc.hubscore.module.loop.api;
+package ru.hubsmc.hubscore.module.loop;
 
 import org.bukkit.entity.Player;
 

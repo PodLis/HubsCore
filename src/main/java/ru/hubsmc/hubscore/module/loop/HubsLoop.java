@@ -12,14 +12,22 @@ import org.bukkit.scoreboard.Scoreboard;
 import ru.hubsmc.hubscore.CoreModule;
 import ru.hubsmc.hubscore.PluginUtils;
 import ru.hubsmc.hubscore.exception.ConfigurationPartMissingException;
-import ru.hubsmc.hubscore.module.loop.api.*;
+import ru.hubsmc.hubscore.module.loop.action.ActionBar;
 import ru.hubsmc.hubscore.module.loop.board.App;
-import ru.hubsmc.hubscore.module.loop.board.ScoreboardHolder;
+import ru.hubsmc.hubscore.module.loop.boss.HubsBar;
+import ru.hubsmc.hubscore.module.loop.chat.ChatListener;
+import ru.hubsmc.hubscore.module.loop.chat.ChatMessage;
+import ru.hubsmc.hubscore.module.loop.chat.PlayerCommand;
+import ru.hubsmc.hubscore.module.loop.chat.RawMessage;
+import ru.hubsmc.hubscore.module.loop.chat.plugins.PermissionsPlugin;
+import ru.hubsmc.hubscore.module.loop.chat.plugins.PluginManager;
 import ru.hubsmc.hubscore.util.ConfigUtils;
 import ru.hubsmc.hubscore.util.JsonConverter;
 
 import java.util.*;
 
+import static ru.hubsmc.hubscore.PluginUtils.logConsole;
+import static ru.hubsmc.hubscore.util.PlayerUtils.replacePlayerPlaceholders;
 import static ru.hubsmc.hubscore.util.StringUtils.replaceSymbolsAndNull;
 
 public class HubsLoop extends CoreModule {
@@ -47,9 +55,20 @@ public class HubsLoop extends CoreModule {
     private PlayerCommand playerFeedCommand;
     private String consoleFeedCommand;
 
+    private static PluginManager manager;
+    public static String NORMAL_FORMAT;
+    public static String LOCAL_FORMAT;
+    public static String GLOBAL_FORMAT;
+    public static String TAB_FORMAT;
+    public static double LOCAL_RANGE;
+    public static List<String> goodIpsAndDomains;
+
     @Override
     public void onEnable() {
         loadFiles();
+        manager = new PluginManager();
+        logConsole("Successfully hooked into: " + PluginManager.getInstance().getName());
+        PluginUtils.registerEventsOfListener(new ChatListener());
     }
 
     @Override
@@ -65,6 +84,7 @@ public class HubsLoop extends CoreModule {
 
     @Override
     public void onPlayerJoin(Player player) {
+        player.setPlayerListName(replacePlayerPlaceholders(player, TAB_FORMAT));
     }
 
     @Override
@@ -211,6 +231,18 @@ public class HubsLoop extends CoreModule {
         }
         PluginUtils.runAppTaskTimer(app);
 
+        // player-chat and tab
+        NORMAL_FORMAT = PluginUtils.getStringsConfig().getString("chat.format.normal");
+        LOCAL_FORMAT = PluginUtils.getStringsConfig().getString("chat.format.local");
+        GLOBAL_FORMAT = PluginUtils.getStringsConfig().getString("chat.format.global");
+        TAB_FORMAT = PluginUtils.getStringsConfig().getString("tab.format");
+        LOCAL_RANGE = configuration.getDouble("chat.local-range");
+        goodIpsAndDomains = configuration.getStringList("chat.good-ips-and-domains");
+
+    }
+
+    public static PermissionsPlugin getChatManager() {
+        return manager;
     }
 
 }

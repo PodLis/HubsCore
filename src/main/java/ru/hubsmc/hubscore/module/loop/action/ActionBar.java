@@ -1,14 +1,15 @@
-package ru.hubsmc.hubscore.module.loop.api;
+package ru.hubsmc.hubscore.module.loop.action;
 
 import net.minecraft.server.v1_15_R1.ChatMessageType;
 import net.minecraft.server.v1_15_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_15_R1.PacketPlayOutChat;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import ru.hubsmc.hubscore.module.loop.ToPlayerSendable;
 
 import java.util.Collection;
 
-public class ActionBar implements ToPlayerSendable{
+public class ActionBar implements ToPlayerSendable {
 
     private PacketPlayOutChat packet;
 

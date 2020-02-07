@@ -19,21 +19,38 @@ import ru.hubsmc.hubscore.exception.CommandNotFoundException;
 import ru.hubsmc.hubscore.exception.ConfigurationPartMissingException;
 import ru.hubsmc.hubscore.exception.HubsServerPluginMissingException;
 import ru.hubsmc.hubscore.exception.IncorrectConfigurationException;
+import ru.hubsmc.hubscore.module.loop.item.InteractItemMeta;
 import ru.hubsmc.hubscore.module.loop.board.App;
+import ru.hubsmc.hubscore.util.StringUtils;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Map;
 import java.util.logging.Level;
 
+/**
+ * "static" class, which provides a lot of server-level methods to HubsCore, HubsModule's and HubsServer
+ */
+
 public class PluginUtils {
+
+    //
+    // extra important methods
 
     public static HubsServer getHubsServer() {
         return HubsCore.getInstance().server;
     }
 
-    public static String getVersion() {
-        return HubsCore.getInstance().getDescription().getVersion();
+    public static File getMainFolder() {
+        return HubsCore.getInstance().mainFolder;
     }
+
+    public static Collection<CoreModule> getModules() {
+        return HubsCore.getInstance().coreModules.values();
+    }
+
+    //
+    // reload methods
 
     static void reloadConfig() {
         reloadStrings();
@@ -48,43 +65,24 @@ public class PluginUtils {
         HubsCore.CORE_PREFIX = stringsConfig.getString("chat.prefixes.hubscore");
     }
 
-    public static FileConfiguration getStringsConfig() {
-        return getConfigInFolder(HubsCore.getInstance().coreFolder, "strings");
-    }
+    //
+    // configuration methods
 
-    public static File getFileToSaveParse(String fileName) {
-        return new File(getMenuFolder(), fileName + ".yml");
-    }
-
-    private static File getMenuFolder() {
-        File folder = new File(HubsCore.getInstance().coreFolder, "menu");
-        if (!folder.exists() && folder.mkdir()) {
-            logConsole("Menu folder recreated");
+    static String getExtremelyNeedConfigString(FileConfiguration configuration, String path) {
+        String res;
+        try {
+            res = configuration.getString(path);
+            if (res == null || res.equals("")) {
+                throw new ConfigurationPartMissingException("Line \"" + path + "\" missing or not filled in file " + configuration.getName());
+            }
+        } catch (ConfigurationPartMissingException e) {
+            res = null;
+            e.printStackTrace();
         }
-        return folder;
+        return res;
     }
 
-    public static boolean menuFileExists(String name) {
-        return (new File(getMenuFolder(), name + ".yml")).exists();
-    }
-
-    public static void loadPlayerAsHubsPlayer(Player player, int dollars, int mana, int max, int regen) {
-        HubsCore.getInstance().setHubsPlayer(player, dollars, mana, max, regen);
-    }
-
-    public static void unloadHubsPlayer(Player player) {
-        HubsCore.getInstance().removeHubsPlayer(player);
-    }
-
-    public static boolean isPlayerOnHubs(Player player) {
-        return HubsCore.getInstance().isPlayerOnHubs(player);
-    }
-
-    public static HubsPlayer getHubsPlayer(Player player) {
-        return HubsCore.getInstance().getHubsPlayer(player);
-    }
-
-    static FileConfiguration getConfigInFolder(File folder, String fileName) {
+    public static FileConfiguration getConfigInFolder(File folder, String fileName) {
         File file = new File(folder, fileName + ".yml");
         FileConfiguration configuration = null;
         try {
@@ -105,9 +103,70 @@ public class PluginUtils {
         return getConfigInFolder(HubsCore.getInstance().coreFolder, fileName);
     }
 
-    public static Collection<CoreModule> getModules() {
-        return HubsCore.getInstance().coreModules.values();
+    public static FileConfiguration getStringsConfig() {
+        return getConfigInFolder(HubsCore.getInstance().coreFolder, "strings");
     }
+
+    public static Map<String, String> getServerMap() {
+        return StringUtils.configSectionToStringMap(getConfigInFolder(HubsCore.getInstance().mainFolder, "servers"));
+    }
+
+    public static File getFileToSaveParse(String fileName) {
+        return new File(getMenuFolder(), fileName + ".yml");
+    }
+
+    private static File getMenuFolder() {
+        File folder = new File(HubsCore.getInstance().coreFolder, "menu");
+        if (!folder.exists() && folder.mkdir()) {
+            logConsole("Menu folder recreated");
+        }
+        return folder;
+    }
+
+    public static boolean menuFileExists(String name) {
+        return (new File(getMenuFolder(), name + ".yml")).exists();
+    }
+
+    //
+    // HubsPlayer methods
+
+    public static void loadPlayerAsHubsPlayer(Player player, int dollars, int mana, int max, int regen) {
+        HubsCore.getInstance().setHubsPlayer(player, dollars, mana, max, regen);
+    }
+
+    public static void unloadHubsPlayer(Player player) {
+        HubsCore.getInstance().removeHubsPlayer(player);
+    }
+
+    public static boolean isPlayerOnHubs(Player player) {
+        return HubsCore.getInstance().isPlayerOnHubs(player);
+    }
+
+    public static HubsPlayer getHubsPlayer(Player player) {
+        return HubsCore.getInstance().getHubsPlayer(player);
+    }
+
+    //
+    // ItemInteract methods
+
+    public static void registerItemInteract(InteractItemMeta interactItemMeta, Runnable runnable) {
+        HubsCore.getInstance().interactItemMap.put(interactItemMeta, runnable);
+    }
+
+    public static void unregisterItemInteract(InteractItemMeta interactItemMeta) {
+        HubsCore.getInstance().interactItemMap.remove(interactItemMeta);
+    }
+
+    public static boolean runInteractIfExists(InteractItemMeta interactItemMeta) {
+        if (HubsCore.getInstance().interactItemMap.containsKey(interactItemMeta)) {
+            HubsCore.getInstance().interactItemMap.get(interactItemMeta).run();
+            return true;
+        }
+        return false;
+    }
+
+    //
+    // server-subs methods
 
     public static void setCommandExecutorAndTabCompleter(String label, CommandExecutor command) {
         try {
@@ -133,6 +192,10 @@ public class PluginUtils {
         Bukkit.getScheduler().scheduleSyncDelayedTask(HubsCore.getInstance(), runnable);
     }
 
+    public static void runTaskLater(Runnable runnable, long l) {
+        Bukkit.getScheduler().runTaskLater(HubsCore.getInstance(), runnable, l);
+    }
+
     public static BossBar createBossBar(String text, BarColor color, BarStyle style) {
         return HubsCore.getInstance().getServer().createBossBar(text, color, style);
     }
@@ -144,6 +207,17 @@ public class PluginUtils {
     public static void runAppTaskTimer(App app) {
         app.runTaskTimer(HubsCore.getInstance(), 1L, 2L);
     }
+
+    public static void sendPluginMessage(Player player, String s, byte[] bytes) {
+        player.sendPluginMessage(HubsCore.getInstance(), s, bytes);
+    }
+
+    public static boolean checkIfServerInServerMap(String server) {
+        return HubsCore.getInstance().serverPluginsServerNamesMap.containsValue(server);
+    }
+
+    //
+    // really main method
 
     static void getMainThings() {
 
@@ -158,6 +232,7 @@ public class PluginUtils {
             Plugin plugin = Bukkit.getServer().getPluginManager().loadPlugin(new File(HubsCore.getInstance().getDataFolder(), serverName + "-" + version + ".jar"));
             if (plugin instanceof HubsServer) {
                 HubsCore.getInstance().setServer((HubsServer) plugin);
+                HubsCore.getInstance().serverName = serverName;
             } else {
                 throw new HubsServerPluginMissingException("plugin with name \"" + serverName + "\" is not HubsServer plugin");
             }
@@ -191,19 +266,8 @@ public class PluginUtils {
 
     }
 
-    static String getExtremelyNeedConfigString(FileConfiguration configuration, String path) {
-        String res;
-        try {
-            res = configuration.getString(path);
-            if (res == null || res.equals("")) {
-                throw new ConfigurationPartMissingException("Line \"" + path + "\" missing or not filled in file " + configuration.getName());
-            }
-        } catch (ConfigurationPartMissingException e) {
-            res = null;
-            e.printStackTrace();
-        }
-        return res;
-    }
+    //
+    // sub-info methods
 
     public static void logConsole(String info) {
         logConsole(Level.INFO, info);
@@ -211,6 +275,10 @@ public class PluginUtils {
 
     public static void logConsole(Level level, String message) {
         Bukkit.getLogger().log(level, "[HubsCore] " + message);
+    }
+
+    public static String getVersion() {
+        return HubsCore.getInstance().getDescription().getVersion();
     }
 
 }

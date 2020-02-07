@@ -1,9 +1,28 @@
 package ru.hubsmc.hubscore.util;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
+import ru.hubsmc.hubscore.exception.IncorrectConfigurationException;
+import ru.hubsmc.hubscore.module.loop.title.HubsTitle;
 
 public class ConfigUtils {
+
+    public static HubsTitle parseTitle(String configLine) throws IncorrectConfigurationException {
+        String[] parts = configLine.split(" :: ");
+
+        try {
+            return new HubsTitle(
+                    ChatColor.translateAlternateColorCodes('&', parts[0]),
+                    ChatColor.translateAlternateColorCodes('&', parts[1]),
+                    Integer.parseInt(parts[2]),
+                    Integer.parseInt(parts[3]),
+                    Integer.parseInt(parts[4]),
+                    Integer.parseInt(parts[5]));
+        } catch (Exception e) {
+            throw new IncorrectConfigurationException("Wrong title configuration:" + configLine);
+        }
+    }
 
     public static String[][] getStringsAndKeys(ConfigurationSection section) {
 

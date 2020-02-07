@@ -1,7 +1,9 @@
 <component name="ProjectDictionaryState">
   <dictionary name="CompX">
     <words>
+      <w>anim</w>
       <w>cmds</w>
+      <w>displayname</w>
       <w>hubixes</w>
       <w>hubscore</w>
       <w>hubsmc</w>
@@ -9,7 +11,9 @@
       <w>mana</w>
       <w>papermc</w>
       <w>rosenboum</w>
+      <w>sendable</w>
       <w>sonatype</w>
+      <w>strikethrough</w>
       <w>tablo</w>
     </words>
   </dictionary>

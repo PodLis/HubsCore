@@ -1,4 +1,4 @@
-package ru.hubsmc.hubscore.module.loop.api;
+package ru.hubsmc.hubscore.module.loop.chat;
 
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.entity.Player;

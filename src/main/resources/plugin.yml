@@ -47,6 +47,7 @@ permissions:
       hubs.pay.*: true
       hubs.convert: true
       hubs.top: true
+      hubs.chat.*: true
   hubscore.utils:
     description: Gives access to utils commands.
     default: false
@@ -77,4 +78,36 @@ permissions:
   hubs.convert:
     default: false
   hubs.top:
+    default: false
+  hubs.chat.*:
+    children:
+      hubs.chat.allow: true
+      hubs.chat.global: true
+      hubs.chat.bypass: true
+      hubs.chat.color: true
+      hubs.chat.magic: true
+      hubs.chat.bold: true
+      hubs.chat.strikethrough: true
+      hubs.chat.underline: true
+      hubs.chat.italic: true
+      hubs.chat.reset: true
+  hubs.chat.allow:
+    default: true
+  hubs.chat.global:
+    default: false
+  hubs.chat.bypass:
+    default: false
+  hubs.chat.color:
+    default: false
+  hubs.chat.magic:
+    default: false
+  hubs.chat.bold:
+    default: false
+  hubs.chat.strikethrough:
+    default: false
+  hubs.chat.underline:
+    default: false
+  hubs.chat.italic:
+    default: false
+  hubs.chat.reset:
     default: false

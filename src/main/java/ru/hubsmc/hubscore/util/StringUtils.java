@@ -1,13 +1,34 @@
 package ru.hubsmc.hubscore.util;
 
+import org.bukkit.configuration.ConfigurationSection;
 import ru.hubsmc.hubscore.HubsCore;
+import ru.hubsmc.hubscore.exception.IncorrectConfigurationException;
+import ru.hubsmc.hubscore.module.loop.HubsLoop;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringUtils {
+
+    private static final Pattern ipPattern = Pattern.compile("((?<![0-9])(?:(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[.,-:; ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))(?![0-9]))");
+    private static final Pattern webPattern = Pattern.compile("[-a-zA-Z0-9@:%_\\+.~#?&//=]{2,256}\\.[a-z]{2,4}\\b(\\/[-a-zA-Z0-9@:%_\\+~#?&//=]*)?");
+
+    public static Map<String, String> configSectionToStringMap(ConfigurationSection section) {
+        Map<String, String> answer = new HashMap<>();
+        for (String key : section.getKeys(false)) {
+            try {
+                String s = section.getString(key);
+                if (s == null) {
+                    throw new IncorrectConfigurationException("String with key '" + key + "' is not a string!");
+                }
+                answer.put(key, section.getString(key));
+            } catch (IncorrectConfigurationException e) {
+                e.printStackTrace();
+            }
+        }
+        return answer;
+    }
 
     public static String replaceSymbolsAndNull(String s) {
         return s != null ? s.replace("&", "\u00a7") : "";
@@ -94,6 +115,56 @@ public class StringUtils {
             res.add(new String[]{texts[i], result.get(i)[0], exec});
         }
         return res;
+    }
+
+    public static boolean checkStringForIPPattern(String message) {
+        message = message.replaceAll(" ", "");
+        Matcher regexMatcher = ipPattern.matcher(message);
+        while (regexMatcher.find()) {
+            if (regexMatcher.group().length() != 0) {
+                String text = regexMatcher.group().trim().replaceAll("http://", "").replaceAll("https://", "").split("/")[0];
+
+                if (text.split("\\.").length > 4) {
+                    String[] domains = text.split("\\.");
+                    String one = domains[domains.length - 1];
+                    String two = domains[domains.length - 2];
+                    String three = domains[domains.length - 3];
+                    String four = domains[domains.length - 4];
+                    text = one + "." + two + "." + three + "." + four;
+                }
+
+                if (ipPattern.matcher(text).find()) {
+                    if (!HubsLoop.goodIpsAndDomains.contains(regexMatcher.group().trim())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkStringForWebPattern(String message) {
+        message = message.replaceAll(" ", "");
+        Matcher regexMatcher = webPattern.matcher(message);
+        while (regexMatcher.find()) {
+            if (regexMatcher.group().length() != 0) {
+                String text = regexMatcher.group().trim().replaceAll("http://", "").replaceAll("https://", "").split("/")[0];
+
+                if (text.split("\\.").length > 2) {
+                    String[] domains = text.split("\\.");
+                    String toplevel = domains[domains.length - 1];
+                    String second = domains[domains.length - 2];
+                    text = second + "." + toplevel;
+                }
+
+                if (webPattern.matcher(text).find()) {
+                    if (!HubsLoop.goodIpsAndDomains.contains(text)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }

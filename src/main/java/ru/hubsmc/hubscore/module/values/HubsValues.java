@@ -255,15 +255,16 @@ public class HubsValues extends CoreModule {
 
     void loadFiles() {
         configuration = PluginUtils.getConfigInCoreFolder("values");
-        specialDataStore = new ValuesPlayerData();
-        specialDataStore.prepareToWork("jdbc:mariadb://localhost/" + configuration.getString("sql.database"),
-                configuration.getString("sql.user"),
-                configuration.getString("sql.password"));
 
         START_MANA = configuration.getInt("mana.start_amount");
         START_REGEN = configuration.getInt("regen.start_amount");
         OFFLINE_COEFFICIENT = configuration.getInt("regen.offline_coefficient");
         HUBIXES_TO_DOLLARS_RATE = configuration.getInt("dollars.rate");
+
+        specialDataStore = new ValuesPlayerData();
+        specialDataStore.prepareToWork("jdbc:mariadb://localhost/" + configuration.getString("sql.database"),
+                configuration.getString("sql.user"),
+                configuration.getString("sql.password"));
 
         // small protection, if somebody (once) will join on the server before plugin completely loaded
         for (Player player : Bukkit.getOnlinePlayers()) {

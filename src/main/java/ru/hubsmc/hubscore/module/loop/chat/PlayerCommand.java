@@ -1,6 +1,7 @@
-package ru.hubsmc.hubscore.module.loop.api;
+package ru.hubsmc.hubscore.module.loop.chat;
 
 import org.bukkit.entity.Player;
+import ru.hubsmc.hubscore.module.loop.ToPlayerSendable;
 
 import java.util.Collection;
 

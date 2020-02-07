@@ -12,6 +12,8 @@ import ru.hubsmc.hubscore.listener.SuccessLoginEvent;
 import ru.hubsmc.hubscore.module.chesterton.HubsChesterton;
 import ru.hubsmc.hubscore.module.essentials.HubsEssentials;
 import ru.hubsmc.hubscore.module.loop.HubsLoop;
+import ru.hubsmc.hubscore.module.loop.item.InteractItemMeta;
+import ru.hubsmc.hubscore.module.security.HubsSecurity;
 import ru.hubsmc.hubscore.module.values.HubsValues;
 import ru.hubsmc.hubscore.util.UtilsCommand;
 
@@ -21,7 +23,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static ru.hubsmc.hubscore.PluginUtils.*;
-import static ru.hubsmc.hubscore.util.ServerUtils.logConsole;
 
 public final class HubsCore extends JavaPlugin {
 
@@ -37,10 +38,14 @@ public final class HubsCore extends JavaPlugin {
     private byte cycleMin;
 
     Map<String, CoreModule> coreModules;
-    HubsServer server;
     File mainFolder, coreFolder;
 
+    HubsServer server;
+    String serverName;
+    Map<String, String> serverPluginsServerNamesMap;
+
     private Map<Player, HubsPlayer> hubsPlayerMap;
+    Map<InteractItemMeta, Runnable> interactItemMap;
 
     @Override
     public void onEnable() {
@@ -52,6 +57,11 @@ public final class HubsCore extends JavaPlugin {
         mainScheduler = getServer().getScheduler();
         cycleMin = 0;
         hubsPlayerMap = new HashMap<>();
+        interactItemMap = new HashMap<>();
+        serverPluginsServerNamesMap = PluginUtils.getServerMap();
+
+        // register a way to change server
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         // strings.yml loads
         reloadStrings();
@@ -62,6 +72,7 @@ public final class HubsCore extends JavaPlugin {
         coreModules.put("HubsChesterton", new HubsChesterton());
         coreModules.put("HubsLoop", new HubsLoop());
         coreModules.put("HubsEssentials", new HubsEssentials());
+        coreModules.put("HubsSecurity", new HubsSecurity());
         for (CoreModule module : coreModules.values()) {
             module.onEnable();
         }

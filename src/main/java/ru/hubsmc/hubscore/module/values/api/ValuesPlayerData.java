@@ -18,14 +18,17 @@ public class ValuesPlayerData extends PlayerData {
     private static final String C_MAX = "max";
     private static final String C_REGEN = "regen";
 
-    private static final int START_MANA = HubsValues.START_MANA;
-    private static final int START_MAX = HubsValues.START_MANA;
-    private static final int START_REGEN = HubsValues.START_REGEN;
+    private static int START_MANA;
+    private static int START_MAX;
+    private static int START_REGEN;
     private static final int START_DOLLARS = 0;
     private static final int START_HUBIXES = 0;
 
     public ValuesPlayerData() {
         super(TABLE_NAME, C_PLAYER, C_DOLLARS, C_HUBIXES, C_MANA, C_MAX, C_REGEN);
+        START_MANA = HubsValues.START_MANA;
+        START_MAX = HubsValues.START_MANA;
+        START_REGEN = HubsValues.START_REGEN;
     }
 
     public void prepareToWork(String url, String user, String password) {

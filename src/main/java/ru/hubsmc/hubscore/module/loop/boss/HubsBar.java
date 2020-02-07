@@ -1,14 +1,15 @@
-package ru.hubsmc.hubscore.module.loop.api;
+package ru.hubsmc.hubscore.module.loop.boss;
 
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import ru.hubsmc.hubscore.PluginUtils;
+import ru.hubsmc.hubscore.module.loop.ToPlayerSendable;
 
 import java.util.Collection;
 
-public class HubsBar implements ToPlayerSendable{
+public class HubsBar implements ToPlayerSendable {
 
     private BossBar bossBar;
 

@@ -15,7 +15,7 @@ public class ItemInteractEvent implements Listener {
         if ( (event.getAction() != Action.PHYSICAL) && (event.getItem() != null) ) {
             ItemMeta itemMeta = event.getItem().getItemMeta();
             if (itemMeta != null) {
-                if (PluginUtils.runInteractIfExists( new InteractItemMeta(itemMeta, event.getAction(), event.getPlayer().isSneaking()) )) {
+                if (PluginUtils.runInteractIfExists( new InteractItemMeta(itemMeta, event.getAction(), event.getPlayer().isSneaking()), event.getPlayer() )) {
                     event.setCancelled(true);
                 }
             }

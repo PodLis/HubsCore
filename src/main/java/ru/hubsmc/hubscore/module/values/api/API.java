@@ -59,7 +59,7 @@ public class API {
      */
     public static boolean setValueFromName(OfflinePlayer offlinePlayer, String valueType, int amount) {
         if (!(offlinePlayer instanceof Player)) {
-            saveValue(offlinePlayer.getUniqueId().toString(), valueType, amount);
+            saveHubsValue(offlinePlayer.getUniqueId().toString(), valueType, amount);
             return false;
         }
         switch (valueType) {
@@ -80,7 +80,7 @@ public class API {
                 break;
             }
             default: {
-                saveValue(offlinePlayer.getUniqueId().toString(), valueType, amount);
+                saveHubsValue(offlinePlayer.getUniqueId().toString(), valueType, amount);
                 return false;
             }
         }
@@ -179,7 +179,7 @@ public class API {
      */
     public static boolean setMana(OfflinePlayer offlinePlayer, int amount) {
         if (!(offlinePlayer instanceof Player)) {
-            saveValue(offlinePlayer.getUniqueId().toString(), "mana", amount);
+            saveHubsValue(offlinePlayer.getUniqueId().toString(), "mana", amount);
             return false;
         }
         setManaToMap(offlinePlayer.getPlayer(), amount);
@@ -195,7 +195,7 @@ public class API {
     public static boolean addMana(OfflinePlayer offlinePlayer, int amount) {
         if (!(offlinePlayer instanceof Player)) {
             String UUID = offlinePlayer.getUniqueId().toString();
-            saveValue(offlinePlayer.getUniqueId().toString(), "mana", amount + loadValue(UUID, "mana"));
+            saveHubsValue(offlinePlayer.getUniqueId().toString(), "mana", amount + loadValue(UUID, "mana"));
             return false;
         }
         Player player = offlinePlayer.getPlayer();
@@ -212,7 +212,7 @@ public class API {
     public static boolean overflowMana(OfflinePlayer offlinePlayer, int amount) {
         if (!(offlinePlayer instanceof Player)) {
             String UUID = offlinePlayer.getUniqueId().toString();
-            saveValue(UUID, "mana", amount + loadValue(UUID, "mana"));
+            saveHubsValue(UUID, "mana", amount + loadValue(UUID, "mana"));
             return false;
         }
         Player player = offlinePlayer.getPlayer();
@@ -232,7 +232,7 @@ public class API {
     public static boolean removeMana(OfflinePlayer offlinePlayer, int amount) {
         if (!(offlinePlayer instanceof Player)) {
             String UUID = offlinePlayer.getUniqueId().toString();
-            saveValue(UUID, "mana", Math.max(loadValue(UUID, "mana") - amount, 0));
+            saveHubsValue(UUID, "mana", Math.max(loadValue(UUID, "mana") - amount, 0));
             return false;
         }
         Player player = offlinePlayer.getPlayer();
@@ -253,7 +253,7 @@ public class API {
         if (!(offlinePlayer instanceof Player)) {
             String UUID = offlinePlayer.getUniqueId().toString();
             if (loadValue(UUID, "mana") >= amount) {
-                saveValue(UUID, "mana", loadValue(UUID, "mana") - amount);
+                saveHubsValue(UUID, "mana", loadValue(UUID, "mana") - amount);
                 return -1;
             }
             return 0;
@@ -274,7 +274,7 @@ public class API {
     public static boolean fillMana(OfflinePlayer offlinePlayer) {
         if (!(offlinePlayer instanceof Player)) {
             String UUID = offlinePlayer.getUniqueId().toString();
-            saveValue(UUID, "mana", loadValue(UUID, "max"));
+            saveHubsValue(UUID, "mana", loadValue(UUID, "max"));
             return false;
         }
         Player player = offlinePlayer.getPlayer();
@@ -318,7 +318,7 @@ public class API {
      */
     public static boolean setMaxMana(OfflinePlayer offlinePlayer, int amount) {
         if (!(offlinePlayer instanceof Player)) {
-            saveValue(offlinePlayer.getUniqueId().toString(), "max", amount);
+            saveHubsValue(offlinePlayer.getUniqueId().toString(), "max", amount);
             return false;
         }
         setMaxManaToMap(offlinePlayer.getPlayer(), amount);
@@ -334,7 +334,7 @@ public class API {
     public static boolean increaseMaxMana(OfflinePlayer offlinePlayer, int amount) {
         if (!(offlinePlayer instanceof Player)) {
             String UUID = offlinePlayer.getUniqueId().toString();
-            saveValue(UUID, "max", amount + loadValue(UUID, "max"));
+            saveHubsValue(UUID, "max", amount + loadValue(UUID, "max"));
             return false;
         }
         Player player = offlinePlayer.getPlayer();
@@ -364,7 +364,7 @@ public class API {
      */
     public static boolean setRegenMana(OfflinePlayer offlinePlayer, int amount) {
         if (!(offlinePlayer instanceof Player)) {
-            saveValue(offlinePlayer.getUniqueId().toString(), "regen", amount);
+            saveHubsValue(offlinePlayer.getUniqueId().toString(), "regen", amount);
             return false;
         }
         setRegenManaToMap(offlinePlayer.getPlayer(), amount);
@@ -380,7 +380,7 @@ public class API {
     public static boolean increaseRegenMana(OfflinePlayer offlinePlayer, int amount) {
         if (!(offlinePlayer instanceof Player)) {
             String UUID = offlinePlayer.getUniqueId().toString();
-            saveValue(UUID, "regen", amount + loadValue(UUID, "regen"));
+            saveHubsValue(UUID, "regen", amount + loadValue(UUID, "regen"));
             return false;
         }
         Player player = offlinePlayer.getPlayer();
@@ -410,7 +410,7 @@ public class API {
      */
     public static boolean setDollars(OfflinePlayer offlinePlayer, int amount) {
         if (!(offlinePlayer instanceof Player)) {
-            saveValue(offlinePlayer.getUniqueId().toString(), "dollars", amount);
+            saveHubsValue(offlinePlayer.getUniqueId().toString(), "dollars", amount);
             return false;
         }
         setDollarsToMap(offlinePlayer.getPlayer(), amount);
@@ -426,7 +426,7 @@ public class API {
     public static boolean addDollars(OfflinePlayer offlinePlayer, int amount) {
         if (!(offlinePlayer instanceof Player)) {
             String UUID = offlinePlayer.getUniqueId().toString();
-            saveValue(UUID, "dollars", amount + loadValue(UUID, "dollars"));
+            saveHubsValue(UUID, "dollars", amount + loadValue(UUID, "dollars"));
             return false;
         }
         Player player = offlinePlayer.getPlayer();
@@ -446,7 +446,7 @@ public class API {
     public static boolean removeDollars(OfflinePlayer offlinePlayer, int amount) {
         if (!(offlinePlayer instanceof Player)) {
             String UUID = offlinePlayer.getUniqueId().toString();
-            saveValue(UUID, "dollars", Math.max(loadValue(UUID, "dollars") - amount, 0));
+            saveHubsValue(UUID, "dollars", Math.max(loadValue(UUID, "dollars") - amount, 0));
             return false;
         }
         Player player = offlinePlayer.getPlayer();
@@ -467,7 +467,7 @@ public class API {
         if (!(offlinePlayer instanceof Player)) {
             String UUID = offlinePlayer.getUniqueId().toString();
             if (loadValue(UUID, "dollars") >= amount) {
-                saveValue(UUID, "dollars", loadValue(UUID, "dollars") - amount);
+                saveHubsValue(UUID, "dollars", loadValue(UUID, "dollars") - amount);
                 return -1;
             }
             return 0;
@@ -497,7 +497,7 @@ public class API {
      * @param amount the amount to set
      */
     public static void setHubixes(OfflinePlayer offlinePlayer, int amount) {
-        saveValue(offlinePlayer.getUniqueId().toString(), "hubixes", amount);
+        saveHubsValue(offlinePlayer.getUniqueId().toString(), "hubixes", amount);
         if (offlinePlayer instanceof Player)
             PluginUtils.getHubsPlayer((Player) offlinePlayer).updateNormalVars();
     }
@@ -509,7 +509,7 @@ public class API {
      */
     public static void addHubixes(OfflinePlayer offlinePlayer, int amount) {
         String UUID = offlinePlayer.getUniqueId().toString();
-        saveValue(UUID, "hubixes", amount + loadValue(UUID, "hubixes"));
+        saveHubsValue(UUID, "hubixes", amount + loadValue(UUID, "hubixes"));
         if (offlinePlayer instanceof Player)
             PluginUtils.getHubsPlayer((Player) offlinePlayer).updateNormalVars();
     }
@@ -524,7 +524,7 @@ public class API {
      */
     public static void removeHubixes(OfflinePlayer offlinePlayer, int amount) {
         String UUID = offlinePlayer.getUniqueId().toString();
-        saveValue(UUID, "hubixes", Math.max(loadValue(UUID, "hubixes") - amount, 0));
+        saveHubsValue(UUID, "hubixes", Math.max(loadValue(UUID, "hubixes") - amount, 0));
         if (offlinePlayer instanceof Player)
             PluginUtils.getHubsPlayer((Player) offlinePlayer).updateNormalVars();
     }
@@ -541,7 +541,7 @@ public class API {
     public static boolean takeHubixes(OfflinePlayer offlinePlayer, int amount) {
         String UUID = offlinePlayer.getUniqueId().toString();
         if (loadValue(UUID, "hubixes") >= amount) {
-            saveValue(UUID, "hubixes", loadValue(UUID, "hubixes") - amount);
+            saveHubsValue(UUID, "hubixes", loadValue(UUID, "hubixes") - amount);
             if (offlinePlayer instanceof Player)
                 PluginUtils.getHubsPlayer((Player) offlinePlayer).updateNormalVars();
             return true;

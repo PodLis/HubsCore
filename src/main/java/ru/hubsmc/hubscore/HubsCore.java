@@ -6,13 +6,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import ru.hubsmc.hubscore.listener.ItemInteractEvent;
 import ru.hubsmc.hubscore.listener.JoinEvent;
 import ru.hubsmc.hubscore.listener.LeaveEvent;
-import ru.hubsmc.hubscore.listener.SuccessLoginEvent;
 import ru.hubsmc.hubscore.module.chesterton.HubsChesterton;
 import ru.hubsmc.hubscore.module.essentials.HubsEssentials;
 import ru.hubsmc.hubscore.module.loop.HubsLoop;
 import ru.hubsmc.hubscore.module.loop.item.InteractItemMeta;
+import ru.hubsmc.hubscore.module.loop.item.ItemInteractAction;
 import ru.hubsmc.hubscore.module.security.HubsSecurity;
 import ru.hubsmc.hubscore.module.values.HubsValues;
 import ru.hubsmc.hubscore.util.UtilsCommand;
@@ -40,12 +41,12 @@ public final class HubsCore extends JavaPlugin {
     Map<String, CoreModule> coreModules;
     File mainFolder, coreFolder;
 
-    HubsServer server;
+    HubsPlugin server;
     String serverName;
     Map<String, String> serverPluginsServerNamesMap;
 
     private Map<Player, HubsPlayer> hubsPlayerMap;
-    Map<InteractItemMeta, Runnable> interactItemMap;
+    Map<InteractItemMeta, ItemInteractAction> interactItemMap;
 
     @Override
     public void onEnable() {
@@ -78,12 +79,11 @@ public final class HubsCore extends JavaPlugin {
         }
 
         // register basic events and basic commands
-        if (LOBBY_LIKE) {
-            registerEventsOfListener(new SuccessLoginEvent());
-        } else {
+        if (!LOBBY_LIKE) {
             registerEventsOfListener(new JoinEvent());
+            registerEventsOfListener(new LeaveEvent());
         }
-        registerEventsOfListener(new LeaveEvent());
+        registerEventsOfListener(new ItemInteractEvent());
         setCommandExecutorAndTabCompleter("hubscore", new Commands());
         setCommandExecutorAndTabCompleter("utils", new UtilsCommand());
 
@@ -160,7 +160,7 @@ public final class HubsCore extends JavaPlugin {
         this.mainFolder = mainFolder;
     }
 
-    public void setServer(HubsServer server) {
+    public void setServer(HubsPlugin server) {
         this.server = server;
     }
 

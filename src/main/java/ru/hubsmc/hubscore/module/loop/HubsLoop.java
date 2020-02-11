@@ -17,7 +17,6 @@ import ru.hubsmc.hubscore.module.loop.board.App;
 import ru.hubsmc.hubscore.module.loop.boss.HubsBar;
 import ru.hubsmc.hubscore.module.loop.chat.ChatListener;
 import ru.hubsmc.hubscore.module.loop.chat.ChatMessage;
-import ru.hubsmc.hubscore.module.loop.chat.PlayerCommand;
 import ru.hubsmc.hubscore.module.loop.chat.RawMessage;
 import ru.hubsmc.hubscore.module.loop.chat.plugins.PermissionsPlugin;
 import ru.hubsmc.hubscore.module.loop.chat.plugins.PluginManager;
@@ -40,7 +39,6 @@ public class HubsLoop extends CoreModule {
     private int bossBar_mark;
     private int actionBar_mark;
     private int chatMessage_mark;
-    private int feed_mark;
 
     private int actionBar_stand_seconds;
     private ActionBar currentActionBar;
@@ -51,9 +49,6 @@ public class HubsLoop extends CoreModule {
 
     public static Scoreboard EMPTY_BOARD;
     public static App app;
-
-    private PlayerCommand playerFeedCommand;
-    private String consoleFeedCommand;
 
     private static PluginManager manager;
     public static String NORMAL_FORMAT;
@@ -119,11 +114,6 @@ public class HubsLoop extends CoreModule {
             chatMessages.get(chatMessage_counter % chatMessages.size()).send(players);
         }
 
-        if (loop_counter % feed_mark == 0) {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), consoleFeedCommand);
-            playerFeedCommand.send(players);
-        }
-
         loop_counter++;
 
     }
@@ -160,11 +150,6 @@ public class HubsLoop extends CoreModule {
         bossBar_mark = configuration.getInt("boss-bars.delay");
         actionBar_mark = configuration.getInt("action-bars.delay");
         chatMessage_mark = configuration.getInt("chat-messages.delay");
-        feed_mark = configuration.getInt("periodic-feed.delay");
-
-        //feeding
-        consoleFeedCommand = configuration.getString("periodic-feed.cmd-to-console");
-        playerFeedCommand = new PlayerCommand(configuration.getString("periodic-feed.cmd-to-player"));
 
         //boss-bars
         String[] bossTexts = ConfigUtils.getStrings(configuration.getConfigurationSection("boss-bars.bars"), "text");

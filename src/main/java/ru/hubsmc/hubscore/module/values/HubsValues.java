@@ -29,11 +29,15 @@ public class HubsValues extends CoreModule {
     public static int OFFLINE_COEFFICIENT;
     public static int HUBIXES_TO_DOLLARS_RATE;
 
+    private static String url;
+    private static String user;
+    private static String pass;
+
     private static boolean online;
 
     private FileConfiguration configuration;
 
-    private ValuesPlayerData specialDataStore;
+    private static ValuesPlayerData specialDataStore;
 
     @Override
     public void onEnable() {
@@ -261,16 +265,28 @@ public class HubsValues extends CoreModule {
         OFFLINE_COEFFICIENT = configuration.getInt("regen.offline_coefficient");
         HUBIXES_TO_DOLLARS_RATE = configuration.getInt("dollars.rate");
 
+        url = "jdbc:mariadb://localhost/" + configuration.getString("sql.database");
+        user = configuration.getString("sql.user");
+        pass = configuration.getString("sql.password");
         specialDataStore = new ValuesPlayerData();
-        specialDataStore.prepareToWork("jdbc:mariadb://localhost/" + configuration.getString("sql.database"),
-                configuration.getString("sql.user"),
-                configuration.getString("sql.password"));
 
         // small protection, if somebody (once) will join on the server before plugin completely loaded
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (PluginUtils.isPlayerOnHubs(player))
                 reloadPlayerData(player);
         }
+    }
+
+    static String getUrl() {
+        return url;
+    }
+
+    static String getUser() {
+        return user;
+    }
+
+    static String getPass() {
+        return pass;
     }
 
 }

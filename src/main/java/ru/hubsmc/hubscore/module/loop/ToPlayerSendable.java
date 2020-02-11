@@ -6,4 +6,5 @@ import java.util.Collection;
 
 public interface ToPlayerSendable {
     void send(Collection<? extends Player> players);
+    void send(Player player);
 }

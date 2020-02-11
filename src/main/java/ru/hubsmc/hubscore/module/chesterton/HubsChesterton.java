@@ -18,6 +18,7 @@ import java.util.List;
 import static ru.hubsmc.hubscore.PluginUtils.registerEventsOfListener;
 import static ru.hubsmc.hubscore.util.MessageUtils.*;
 import static ru.hubsmc.hubscore.util.ServerUtils.playerIsOnline;
+import static ru.hubsmc.hubscore.util.StringUtils.cutFirstsStrings;
 
 public class HubsChesterton extends CoreModule {
 
@@ -54,8 +55,7 @@ public class HubsChesterton extends CoreModule {
     @Override
     public boolean onCommandExecute(CommandSender sender, Command command, String label, String[] oldArgs) {
 
-        String[] args = new String[oldArgs.length - 2];
-        System.arraycopy(oldArgs, 2, args, 0, args.length);
+        String[] args = cutFirstsStrings(oldArgs, 2);
 
         if (args.length < 1) {
             sendWrongUsageMessage(sender, "/hc module HubsChesterton <sub_command>");
@@ -101,8 +101,7 @@ public class HubsChesterton extends CoreModule {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] oldArgs) {
 
-        String[] args = new String[oldArgs.length - 2];
-        System.arraycopy(oldArgs, 2, args, 0, args.length);
+        String[] args = cutFirstsStrings(oldArgs, 2);
 
         List<String> completionList = new ArrayList<>();
         String partOfCommand;

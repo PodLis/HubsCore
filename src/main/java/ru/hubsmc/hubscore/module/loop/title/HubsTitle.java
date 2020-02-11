@@ -1,6 +1,11 @@
 package ru.hubsmc.hubscore.module.loop.title;
 
-public class HubsTitle {
+import org.bukkit.entity.Player;
+import ru.hubsmc.hubscore.module.loop.ToPlayerSendable;
+
+import java.util.Collection;
+
+public class HubsTitle implements ToPlayerSendable {
 
     private final String title;
     private final String subtitle;
@@ -40,6 +45,18 @@ public class HubsTitle {
 
     public int getDelayNext() {
         return delayNext;
+    }
+
+    @Override
+    public void send(Collection<? extends Player> players) {
+        for (Player player : players) {
+            player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+        }
+    }
+
+    @Override
+    public void send(Player player) {
+        player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
     }
 
 }

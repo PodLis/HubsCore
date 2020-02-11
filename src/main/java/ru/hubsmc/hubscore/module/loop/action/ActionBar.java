@@ -30,4 +30,9 @@ public class ActionBar implements ToPlayerSendable {
             ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
         }
     }
+
+    @Override
+    public void send(Player player) {
+        ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
+    }
 }

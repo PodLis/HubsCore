@@ -1,12 +1,79 @@
 package ru.hubsmc.hubscore.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
+import ru.hubsmc.hubscore.exception.ConfigurationPartMissingException;
 import ru.hubsmc.hubscore.exception.IncorrectConfigurationException;
+import ru.hubsmc.hubscore.exception.WorldNotFoundException;
 import ru.hubsmc.hubscore.module.loop.title.HubsTitle;
+import ru.hubsmc.hubscore.module.loop.title.TitleAnimation;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static ru.hubsmc.hubscore.PluginUtils.logConsole;
+import static ru.hubsmc.hubscore.util.StringUtils.cutFirstsStrings;
 
 public class ConfigUtils {
+
+    public static String getStringInSection(ConfigurationSection section, String path) throws ConfigurationPartMissingException {
+        if (!section.contains(path)) throw new ConfigurationPartMissingException("String with path '" + path + "' in '" + section.getName() + "' is missing");
+        return section.getString(path);
+    }
+
+    public static Location parseLocation(ConfigurationSection section, String path) throws IncorrectConfigurationException, ConfigurationPartMissingException, WorldNotFoundException {
+        String line = getStringInSection(section, path);
+        String[] strings = line.split(":");
+        World world = Bukkit.getWorld(strings[0]);
+        if (world == null) throw new WorldNotFoundException(strings[0]);
+        return parseStringsToLoc(cutFirstsStrings(strings, 1), world);
+    }
+
+    public static Location parseLocation(ConfigurationSection section, String path, World world) throws IncorrectConfigurationException, ConfigurationPartMissingException {
+        return parseStringsToLoc(getStringInSection(section, path).split(":"), world);
+    }
+
+    private static Location parseStringsToLoc(String[] strings, World w) throws IncorrectConfigurationException {
+        try {
+            if (strings.length <= 4)
+                return new Location(w,
+                        Double.parseDouble(strings[0]),
+                        Double.parseDouble(strings[1]),
+                        Double.parseDouble(strings[2])
+                );
+            else
+                return new Location(w,
+                        Double.parseDouble(strings[0]),
+                        Double.parseDouble(strings[1]),
+                        Double.parseDouble(strings[2]),
+                        Float.parseFloat(strings[3]),
+                        Float.parseFloat(strings[4])
+                );
+        } catch (Exception e) {
+            throw new IncorrectConfigurationException("Not enough or wrong information to generate Location of strings " + Arrays.toString(strings), e);
+        }
+    }
+
+
+    public static TitleAnimation loadAnimatedTitle(ConfigurationSection section) {
+        try {
+            List<String> titleSList = section.getStringList("title");
+            boolean repeat = section.getBoolean("repeat");
+            int repeatFrom = section.getInt("start_from");
+            if (repeatFrom > (titleSList.size() - 1)) {
+                repeatFrom = 0;
+                logConsole("start_from value is greater than the title frames in Unregister Title, will use 0 index.");
+            }
+            return new TitleAnimation(titleSList, repeat, repeatFrom);
+        } catch (IncorrectConfigurationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static HubsTitle parseTitle(String configLine) throws IncorrectConfigurationException {
         String[] parts = configLine.split(" :: ");

@@ -19,4 +19,9 @@ public class PlayerCommand implements ToPlayerSendable {
             player.performCommand(command);
         }
     }
+
+    @Override
+    public void send(Player player) {
+        player.performCommand(command);
+    }
 }

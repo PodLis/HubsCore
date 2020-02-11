@@ -14,6 +14,12 @@ public class StringUtils {
     private static final Pattern ipPattern = Pattern.compile("((?<![0-9])(?:(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[.,-:; ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))(?![0-9]))");
     private static final Pattern webPattern = Pattern.compile("[-a-zA-Z0-9@:%_\\+.~#?&//=]{2,256}\\.[a-z]{2,4}\\b(\\/[-a-zA-Z0-9@:%_\\+~#?&//=]*)?");
 
+    public static String[] cutFirstsStrings(String[] strings, int numberToCut) {
+        String[] newStrings = new String[strings.length - numberToCut];
+        System.arraycopy(strings, numberToCut, newStrings, 0, newStrings.length);
+        return newStrings;
+    }
+
     public static Map<String, String> configSectionToStringMap(ConfigurationSection section) {
         Map<String, String> answer = new HashMap<>();
         for (String key : section.getKeys(false)) {

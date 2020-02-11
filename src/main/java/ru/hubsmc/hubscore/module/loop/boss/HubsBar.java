@@ -25,6 +25,11 @@ public class HubsBar implements ToPlayerSendable {
         }
     }
 
+    @Override
+    public void send(Player player) {
+        bossBar.addPlayer(player);
+    }
+
     public void clean() {
         bossBar.removeAll();
     }

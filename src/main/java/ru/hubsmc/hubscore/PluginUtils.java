@@ -21,6 +21,7 @@ import ru.hubsmc.hubscore.exception.HubsServerPluginMissingException;
 import ru.hubsmc.hubscore.exception.IncorrectConfigurationException;
 import ru.hubsmc.hubscore.module.loop.item.InteractItemMeta;
 import ru.hubsmc.hubscore.module.loop.board.App;
+import ru.hubsmc.hubscore.module.loop.item.ItemInteractAction;
 import ru.hubsmc.hubscore.util.StringUtils;
 
 import java.io.File;
@@ -55,6 +56,7 @@ public class PluginUtils {
     static void reloadConfig() {
         reloadStrings();
         getModules().forEach(CoreModule::onReload);
+        HubsCore.getInstance().server.onReload();
     }
 
     static void reloadStrings() {
@@ -63,6 +65,7 @@ public class PluginUtils {
         HubsCore.CHAT_PREFIX = stringsConfig.getString("chat.prefixes.hubs");
         HubsCore.SPACE_PREFIX = stringsConfig.getString("chat.prefixes.space");
         HubsCore.CORE_PREFIX = stringsConfig.getString("chat.prefixes.hubscore");
+        HubsCore.getInstance().server.onStringsReload();
     }
 
     //
@@ -149,17 +152,21 @@ public class PluginUtils {
     //
     // ItemInteract methods
 
+    public static ItemInteractAction getItemInteractAction(InteractItemMeta interactItemMeta) {
+        return HubsCore.getInstance().interactItemMap.get(interactItemMeta);
+    }
+
     public static void registerItemInteract(InteractItemMeta interactItemMeta, Runnable runnable) {
-        HubsCore.getInstance().interactItemMap.put(interactItemMeta, runnable);
+        HubsCore.getInstance().interactItemMap.put(interactItemMeta, new ItemInteractAction(runnable));
     }
 
     public static void unregisterItemInteract(InteractItemMeta interactItemMeta) {
         HubsCore.getInstance().interactItemMap.remove(interactItemMeta);
     }
 
-    public static boolean runInteractIfExists(InteractItemMeta interactItemMeta) {
+    public static boolean runInteractIfExists(InteractItemMeta interactItemMeta, Player player) {
         if (HubsCore.getInstance().interactItemMap.containsKey(interactItemMeta)) {
-            HubsCore.getInstance().interactItemMap.get(interactItemMeta).run();
+            getItemInteractAction(interactItemMeta).run(player);
             return true;
         }
         return false;
@@ -172,7 +179,9 @@ public class PluginUtils {
         try {
             PluginCommand pluginCommand = HubsCore.getInstance().getCommand(label);
             if (pluginCommand == null) {
-                throw new CommandNotFoundException("Command '" + label + "' is not registered");
+                pluginCommand = HubsCore.getInstance().server.getCommand(label);
+                if (pluginCommand == null)
+                    throw new CommandNotFoundException("Command '" + label + "' is not registered");
             } else {
                 pluginCommand.setExecutor(command);
                 if (command instanceof TabCompleter) {
@@ -231,7 +240,7 @@ public class PluginUtils {
 
             Plugin plugin = Bukkit.getServer().getPluginManager().loadPlugin(new File(HubsCore.getInstance().getDataFolder(), serverName + "-" + version + ".jar"));
             if (plugin instanceof HubsServer) {
-                HubsCore.getInstance().setServer((HubsServer) plugin);
+                HubsCore.getInstance().setServer((HubsPlugin) plugin);
                 HubsCore.getInstance().serverName = serverName;
             } else {
                 throw new HubsServerPluginMissingException("plugin with name \"" + serverName + "\" is not HubsServer plugin");
@@ -279,6 +288,10 @@ public class PluginUtils {
 
     public static String getVersion() {
         return HubsCore.getInstance().getDescription().getVersion();
+    }
+
+    public static String getServerName() {
+        return HubsCore.getInstance().serverName;
     }
 
 }

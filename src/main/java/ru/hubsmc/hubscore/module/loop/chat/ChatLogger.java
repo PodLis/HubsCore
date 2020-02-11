@@ -55,7 +55,7 @@ public class ChatLogger {
     private static String fileName() {
         DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
-        return date.format(cal.getTime()) + ".log";
+        return PluginUtils.getServerName() + "_" + date.format(cal.getTime()) + ".log";
     }
 
     private static String prefix(boolean day) {

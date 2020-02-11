@@ -27,8 +27,10 @@ public class TitleTask {
 
     private void nextFrame() {
         if (!player.isOnline()) return;
-        if (isNeedToStop.test(player)) return;
-
+        if (isNeedToStop.test(player)) {
+            player.sendTitle("", "", 20, 20, 20);
+            return;
+        }
         if (currFrame == lastFrame) {
             if (repeat) {
                 currFrame = repeatFrom;

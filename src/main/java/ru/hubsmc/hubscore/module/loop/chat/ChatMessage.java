@@ -19,4 +19,9 @@ public class ChatMessage implements ToPlayerSendable {
             player.sendMessage(lines);
         }
     }
+
+    @Override
+    public void send(Player player) {
+        player.sendMessage(lines);
+    }
 }

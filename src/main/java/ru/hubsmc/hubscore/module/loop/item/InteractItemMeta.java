@@ -41,7 +41,7 @@ public class InteractItemMeta {
 
     @Override
     public int hashCode() {
-        return Objects.hash(itemMeta, hand, shift);
+        return Objects.hash(itemMeta, hand);
     }
 
 }

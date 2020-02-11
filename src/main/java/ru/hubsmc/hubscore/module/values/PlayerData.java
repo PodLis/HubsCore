@@ -5,22 +5,22 @@ import java.sql.SQLException;
 
 public class PlayerData {
 
-    private static String TABLE_NAME;
+    private String TABLE_NAME;
     protected static final String C_UUID = "uuid";
-    private static String[] COLUMNS;
-    private static String[] stringPrimalValues;
-    private static int[] intPrimalValues;
-    private static double[] doublePrimalValues;
+    private String[] COLUMNS;
+    private String[] stringPrimalValues;
+    private int[] intPrimalValues;
+    private double[] doublePrimalValues;
 
-    private static DataBase dataBase;
-    protected static DataBase.Manager manager;
+    private DataBase dataBase;
+    protected DataBase.Manager manager;
 
     public PlayerData(String table, String... columns) {
         TABLE_NAME = table;
         COLUMNS = columns;
     }
 
-    public void prepareToWork(String url, String user, String password, String[] stringPrimal, int[] intPrimal, double[] doublePrimal) {
+    public void prepareToWork(String[] stringPrimal, int[] intPrimal, double[] doublePrimal) {
         if (stringPrimal.length + intPrimal.length + doublePrimal.length != COLUMNS.length) {
             throw new IllegalArgumentException();
         }
@@ -28,7 +28,7 @@ public class PlayerData {
         intPrimalValues = intPrimal;
         doublePrimalValues = doublePrimal;
         try {
-            dataBase = new DataBase(url, user, password);
+            dataBase = new DataBase(HubsValues.getUrl(), HubsValues.getUser(), HubsValues.getPass());
             manager = dataBase.GetManager();
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,19 +40,19 @@ public class PlayerData {
     }
 
 
-    public static void saveValue(String UUID, String valueType, String valueAmount) {
+    public void saveValue(String UUID, String valueType, String valueAmount) {
         update(UUID, valueType, valueAmount);
     }
 
-    public static void saveValue(String UUID, String valueType, int valueAmount) {
+    public void saveValue(String UUID, String valueType, int valueAmount) {
         update(UUID, valueType, valueAmount);
     }
 
-    public static void saveValue(String UUID, String valueType, double valueAmount) {
+    public void saveValue(String UUID, String valueType, double valueAmount) {
         update(UUID, valueType, valueAmount);
     }
 
-    public static void saveAllValues(String UUID, String[] strings, int[] integers, double[] doubles) {
+    public void saveAllValues(String UUID, String[] strings, int[] integers, double[] doubles) {
         int i = 0;
         for (String value : strings) {
             update(UUID, COLUMNS[i], value);
@@ -68,18 +68,18 @@ public class PlayerData {
         }
     }
 
-    public static void createAccount(String UUID) {
+    public void createAccount(String UUID) {
         insert(UUID, stringPrimalValues, intPrimalValues, doublePrimalValues);
     }
 
-    public static void deleteAccount(String UUID) {
+    public void deleteAccount(String UUID) {
         delete(UUID);
     }
 
 
     // data-safe requests
 
-    public static String selectStringValue(String uuid, String column) {
+    public String selectStringValue(String uuid, String column) {
         try {
             ResultSet rs = manager.Request("SELECT " + column + " FROM " + TABLE_NAME + " WHERE " + C_UUID + " = '" + uuid + "'");
             rs.next();
@@ -90,7 +90,7 @@ public class PlayerData {
         return "";
     }
 
-    public static int selectIntValue(String uuid, String column) {
+    public int selectIntValue(String uuid, String column) {
         try {
             ResultSet rs = manager.Request("SELECT " + column + " FROM " + TABLE_NAME + " WHERE " + C_UUID + " = '" + uuid + "'");
             rs.next();
@@ -101,7 +101,7 @@ public class PlayerData {
         return 0;
     }
 
-    public static double selectDoubleValue(String uuid, String column) {
+    public double selectDoubleValue(String uuid, String column) {
         try {
             ResultSet rs = manager.Request("SELECT " + column + " FROM " + TABLE_NAME + " WHERE " + C_UUID + " = '" + uuid + "'");
             rs.next();
@@ -112,7 +112,7 @@ public class PlayerData {
         return 0;
     }
 
-    public static boolean selectExist(String uuid) {
+    public boolean selectExist(String uuid) {
         try {
             ResultSet rs = manager.Request("SELECT * FROM " + TABLE_NAME + " WHERE " + C_UUID + " = '" + uuid + "'");
             return rs.next();
@@ -125,7 +125,7 @@ public class PlayerData {
 
     // data-unsafe requests
 
-    protected static void insert(String uuid, String[] strings, int[] integers, double[] doubles) {
+    protected void insert(String uuid, String[] strings, int[] integers, double[] doubles) {
         StringBuilder sql = new StringBuilder("insert into " + TABLE_NAME + "(" + C_UUID);
         for (String column : COLUMNS) {
             sql.append(", ").append(column);
@@ -146,19 +146,19 @@ public class PlayerData {
         manager.Execute(sql.toString());
     }
 
-    protected static void update(String uuid, String column, String value) {
+    protected void update(String uuid, String column, String value) {
         manager.Execute("update " + TABLE_NAME + " set " + column + " = '" + value + "' where " + C_UUID + " = '" + uuid + "'");
     }
 
-    protected static void update(String uuid, String column, int value) {
+    protected void update(String uuid, String column, int value) {
         manager.Execute("update " + TABLE_NAME + " set " + column + " = " + value + " where " + C_UUID + " = '" + uuid + "'");
     }
 
-    protected static void update(String uuid, String column, double value) {
+    protected void update(String uuid, String column, double value) {
         manager.Execute("update " + TABLE_NAME + " set " + column + " = " + value + " where " + C_UUID + " = '" + uuid + "'");
     }
 
-    protected static void delete(String uuid) {
+    protected void delete(String uuid) {
         manager.Execute("delete from " + TABLE_NAME + " where " + C_UUID + " = '" + uuid + "'");
     }
 

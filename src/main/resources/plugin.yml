@@ -35,6 +35,9 @@ commands:
   update:
     description: The update command
     usage: <command>
+  tip:
+    description: The tip command
+    usage: <command>
 
 permissions:
   hubscore.*:

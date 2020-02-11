@@ -16,6 +16,10 @@ public interface HubsServer {
 
     void onPlayerQuit(Player player);
 
+    void onReload();
+
+    void onStringsReload();
+
     void onSchedule();
 
     String getStringData(String key);

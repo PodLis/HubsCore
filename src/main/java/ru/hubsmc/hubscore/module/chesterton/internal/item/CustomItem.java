@@ -1,5 +1,6 @@
 package ru.hubsmc.hubscore.module.chesterton.internal.item;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -13,6 +14,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import java.util.List;
 
 import static ru.hubsmc.hubscore.util.StringUtils.replaceColor;
+import static ru.hubsmc.hubscore.util.StringUtils.replaceColorAndSetWhite;
 
 public class CustomItem extends ChestertonItem {
 
@@ -27,7 +29,7 @@ public class CustomItem extends ChestertonItem {
     }
 
     public void setName(String name) {
-        this.name = replaceColor(name);
+        this.name = name;
     }
 
     public String getName() {
@@ -35,7 +37,7 @@ public class CustomItem extends ChestertonItem {
     }
 
     public void setLore(List<String> lore) {
-        this.lore = replaceColor(lore);
+        this.lore = lore;
     }
 
     public void setEnchanted(boolean enchanted) {
@@ -54,11 +56,11 @@ public class CustomItem extends ChestertonItem {
         }
 
         if (name != null) {
-            meta.setDisplayName(name);
+            meta.setDisplayName(ChatColor.WHITE + replaceColor(name));
         }
 
         if (lore != null) {
-            meta.setLore(lore);
+            meta.setLore(replaceColorAndSetWhite(lore));
         }
 
         meta.addItemFlags(

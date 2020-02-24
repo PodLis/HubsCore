@@ -24,4 +24,5 @@ public class ChatMessage implements ToPlayerSendable {
     public void send(Player player) {
         player.sendMessage(lines);
     }
+
 }

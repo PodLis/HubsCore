@@ -27,11 +27,11 @@ import static ru.hubsmc.hubscore.PluginUtils.*;
 
 public final class HubsCore extends JavaPlugin {
 
-    public static String CHAT_PREFIX;
-    public static String SPACE_PREFIX;
-    public static String CORE_PREFIX;
-    public static ConfigurationSection commonMessages;
-    public static boolean LOBBY_LIKE;
+    public static String CHAT_PREFIX; // chat.prefixes.hubs in strings.yml
+    public static String SPACE_PREFIX; // chat.prefixes.space in strings.yml
+    public static String CORE_PREFIX; // chat.prefixes.hubscore in strings.yml
+    public static ConfigurationSection commonMessages; // chat.common-messages in strings.yml
+    public static boolean LOBBY_LIKE; // is-lobby-like in config.yml of coreFolder
 
     private static HubsCore instance;
 
@@ -39,11 +39,13 @@ public final class HubsCore extends JavaPlugin {
     private byte cycleMin;
 
     Map<String, CoreModule> coreModules;
-    File mainFolder, coreFolder;
+
+    File mainFolder; // z_config folder (path to folder in config.yml of coreFolder)
+    File coreFolder; // normal plugin folder in server_name/plugins/
 
     HubsPlugin server;
     String serverName;
-    Map<String, String> serverPluginsServerNamesMap;
+    Map<String, String> serverPluginsServerNamesMap; // convert map from hubs plugins names to bungee server names (HubsLobby -> lobby)
 
     private Map<Player, HubsPlayer> hubsPlayerMap;
     Map<InteractItemMeta, ItemInteractAction> interactItemMap;
@@ -67,7 +69,7 @@ public final class HubsCore extends JavaPlugin {
         // strings.yml loads
         reloadStrings();
 
-        // module enabling
+        // modules enabling
         coreModules = new HashMap<>();
         coreModules.put("HubsValues", new HubsValues());
         coreModules.put("HubsChesterton", new HubsChesterton());
@@ -90,7 +92,7 @@ public final class HubsCore extends JavaPlugin {
         // enable HubsServer plugin
         server.afterCoreStart();
 
-        // load a scheduler
+        // load a scheduler (run onSchedule() methods of all modules and a server)
         mainScheduler.scheduleSyncRepeatingTask(this, () -> {
             for (CoreModule module : coreModules.values()) {
                 module.onSchedule(cycleMin);
@@ -105,7 +107,9 @@ public final class HubsCore extends JavaPlugin {
     @Override
     public void onDisable() {
         mainScheduler.cancelTasks(this);
-        server.beforeCoreStop();
+
+        server.beforeCoreStop(); // disable HubsServer plugin
+
         for (CoreModule module : coreModules.values()) {
             module.onDisable();
         }

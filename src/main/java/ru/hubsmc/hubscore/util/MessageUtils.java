@@ -47,6 +47,10 @@ public class MessageUtils {
         sendCommonMessage(sender, "unknown-error");
     }
 
+    public static void sendAlreadyThatServerMessage(CommandSender sender) {
+        sendCommonMessage(sender, "already-that-server");
+    }
+
     private static void sendCommonMessage(CommandSender sender, String path, String... data) {
         sendMessage(sender, setPlaceholdersPrefixes(getNamespaceString(HubsCore.commonMessages, path, "common-messages"), data));
     }

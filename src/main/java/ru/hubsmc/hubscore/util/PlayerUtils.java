@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import ru.hubsmc.hubscore.Permissions;
+import ru.hubsmc.hubscore.module.chesterton.internal.menu.ChestMenu;
 import ru.hubsmc.hubscore.module.loop.chat.plugins.PluginManager;
 
 import java.util.regex.Pattern;
@@ -103,6 +104,10 @@ public class PlayerUtils {
      */
     public static void setGameMode(Player player, GameMode gameMode) {
         player.setGameMode(gameMode);
+    }
+
+    public static void openMenuToPlayer(Player player, ChestMenu menu) {
+        menu.open(player);
     }
 
 }

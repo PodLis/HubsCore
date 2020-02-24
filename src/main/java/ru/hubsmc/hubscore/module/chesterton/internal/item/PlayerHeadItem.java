@@ -19,6 +19,10 @@ public class PlayerHeadItem extends CustomItem {
         this.base64 = base64;
     }
 
+    public String getBase64() {
+        return base64;
+    }
+
     @Override
     protected ItemStack setItemData(ItemStack itemStack, Player player) {
         return super.setItemData(itemWithBase64(itemStack), player);

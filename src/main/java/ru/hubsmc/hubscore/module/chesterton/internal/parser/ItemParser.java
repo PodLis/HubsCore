@@ -2,6 +2,7 @@ package ru.hubsmc.hubscore.module.chesterton.internal.parser;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import ru.hubsmc.hubscore.module.chesterton.HubsChesterton;
 import ru.hubsmc.hubscore.module.chesterton.internal.ActionClickHandler;
 import ru.hubsmc.hubscore.module.chesterton.internal.action.ItemAction;
 import ru.hubsmc.hubscore.module.chesterton.internal.item.CustomItem;
@@ -22,6 +23,9 @@ public class ItemParser {
         if (type == null) {
             material = Material.BEDROCK;
         } else {
+            if (type.equals("RETURN_BUTTON")) {
+                return HubsChesterton.getReturnButton(menu);
+            }
             material = Material.getMaterial(type);
             if (material == null) {
                 material = Material.BEDROCK;
@@ -59,17 +63,15 @@ public class ItemParser {
             }
         }
 
-        if (section.getString("name") != null)
-            customItem.setName(section.getString("name"));
+        String name = section.getString("name");
+        if (name != null)
+            customItem.setName(name);
         customItem.setLore(section.getStringList("lore"));
         customItem.setEnchanted(section.getBoolean("enchanted"));
 
-        List<ItemAction> actions = new LinkedList<>();
-        for (String s : section.getStringList("on-click")) {
-            ItemAction action = SubParser.parseAction(s, menu);
-            actions.add(action);
-        }
-        customItem.setClickHandler(new ActionClickHandler(actions));
+        String action = section.getString("on-click");
+        if (action != null)
+            customItem.setClickHandler(new ActionClickHandler(SubParser.parseAction(action, menu)));
 
         return customItem;
     }

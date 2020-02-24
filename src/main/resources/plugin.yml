@@ -38,6 +38,9 @@ commands:
   tip:
     description: The tip command
     usage: <command>
+  help:
+    description: The help command
+    usage: <command>
 
 permissions:
   hubscore.*:

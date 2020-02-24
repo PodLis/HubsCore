@@ -42,13 +42,18 @@ public class ServerUtils {
      *
      * @param player The player to be sent to the server
      * @param server the server name
+     * @return true if server the same with current player's server, false otherwise
      */
-    public static void changeServer(Player player, String server) throws IOException {
+    public static boolean changeServer(Player player, String server) throws IOException {
+        if (server.equals(PluginUtils.getBungeeServerName())) {
+            return true;
+        }
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
         dataOutputStream.writeUTF("Connect");
         dataOutputStream.writeUTF(server);
         PluginUtils.sendPluginMessage(player, "BungeeCord", byteArrayOutputStream.toByteArray());
+        return false;
     }
 
     public static boolean checkVault() {

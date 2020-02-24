@@ -8,13 +8,20 @@ import org.bukkit.util.StringUtil;
 import ru.hubsmc.hubscore.CoreModule;
 import ru.hubsmc.hubscore.Permissions;
 import ru.hubsmc.hubscore.module.chesterton.event.InventoryEvent;
+import ru.hubsmc.hubscore.module.chesterton.internal.ActionClickHandler;
 import ru.hubsmc.hubscore.module.chesterton.internal.ChestertonInventoryHolder;
 import ru.hubsmc.hubscore.module.chesterton.internal.MenuUtils;
+import ru.hubsmc.hubscore.module.chesterton.internal.action.ReturnItemAction;
+import ru.hubsmc.hubscore.module.chesterton.internal.item.PlayerHeadItem;
+import ru.hubsmc.hubscore.module.chesterton.internal.menu.ChestMenu;
+import ru.hubsmc.hubscore.module.chesterton.internal.menu.ChestertonMenu;
+import ru.hubsmc.hubscore.module.chesterton.internal.parser.MenuParser;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static ru.hubsmc.hubscore.PluginUtils.getStringsConfig;
 import static ru.hubsmc.hubscore.PluginUtils.registerEventsOfListener;
 import static ru.hubsmc.hubscore.util.MessageUtils.*;
 import static ru.hubsmc.hubscore.util.ServerUtils.playerIsOnline;
@@ -22,8 +29,11 @@ import static ru.hubsmc.hubscore.util.StringUtils.cutFirstsStrings;
 
 public class HubsChesterton extends CoreModule {
 
+    private static PlayerHeadItem RETURN_BUTTON;
+
     @Override
     public void onEnable() {
+        loadFiles();
         registerEventsOfListener(new InventoryEvent());
     }
 
@@ -38,6 +48,7 @@ public class HubsChesterton extends CoreModule {
                 player.closeInventory();
             }
         }
+        loadFiles();
     }
 
     @Override
@@ -144,6 +155,24 @@ public class HubsChesterton extends CoreModule {
                 return null;
         }
 
+    }
+
+    private void loadFiles() {
+        RETURN_BUTTON = new PlayerHeadItem();
+        RETURN_BUTTON.setName(getStringsConfig().getString("menus.buttons.return.name"));
+        RETURN_BUTTON.setBase64(getStringsConfig().getString("menus.buttons.return.base"));
+    }
+
+    public static PlayerHeadItem getReturnButton(ChestertonMenu menu) {
+        PlayerHeadItem playerHeadItem = new PlayerHeadItem();
+        playerHeadItem.setName(RETURN_BUTTON.getName());
+        playerHeadItem.setBase64(RETURN_BUTTON.getBase64());
+        playerHeadItem.setClickHandler(new ActionClickHandler(new ReturnItemAction(menu)));
+        return playerHeadItem;
+    }
+
+    public static ChestMenu getNavigationMenu(Player player) {
+        return MenuParser.parseChestMenu("nav");
     }
 
 }

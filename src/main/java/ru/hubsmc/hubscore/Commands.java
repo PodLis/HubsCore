@@ -96,9 +96,11 @@ public class Commands implements CommandExecutor, TabCompleter {
                         }
 
                         try {
-                            ServerUtils.changeServer(player, server);
+                            if (ServerUtils.changeServer(player, server)) {
+                                sendAlreadyThatServerMessage(player);
+                            }
                         } catch (Exception e) {
-                            throw new ServerErrorException("Problems to change server from '" + HubsCore.getInstance().serverName + "' to '" + server + "'", e);
+                            throw new ServerErrorException(HubsCore.getInstance().serverName, server, e);
                         }
 
                         return true;

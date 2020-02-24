@@ -5,9 +5,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
-import ru.hubsmc.hubscore.module.chesterton.internal.action.ItemAction;
-import ru.hubsmc.hubscore.module.chesterton.internal.action.OpenMenuItemAction;
-import ru.hubsmc.hubscore.module.chesterton.internal.action.ReturnItemAction;
+import ru.hubsmc.hubscore.module.chesterton.internal.action.*;
 import ru.hubsmc.hubscore.module.chesterton.internal.menu.ChestMenu;
 
 import java.util.HashMap;
@@ -45,6 +43,12 @@ public class SubParser {
             case "open":
                 if (strings.length > 1)
                     return new OpenMenuItemAction(menu, strings[1]);
+            case "command":
+                if (strings.length > 1)
+                    return new CommandExecuteAction(strings[1]);
+            case "server":
+                if (strings.length > 1)
+                    return new ServerChangeItemAction(strings[1]);
             default:
                 return new ReturnItemAction(menu);
         }

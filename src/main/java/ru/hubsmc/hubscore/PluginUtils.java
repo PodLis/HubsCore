@@ -294,4 +294,8 @@ public class PluginUtils {
         return HubsCore.getInstance().serverName;
     }
 
+    public static String getBungeeServerName() {
+        return HubsCore.getInstance().serverPluginsServerNamesMap.get(getServerName());
+    }
+
 }

@@ -1,7 +1,9 @@
 package ru.hubsmc.hubscore.util;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import ru.hubsmc.hubscore.HubsCore;
+import ru.hubsmc.hubscore.PluginUtils;
 import ru.hubsmc.hubscore.exception.IncorrectConfigurationException;
 import ru.hubsmc.hubscore.module.loop.HubsLoop;
 
@@ -52,6 +54,18 @@ public class StringUtils {
         return result;
     }
 
+    public static List<String> replaceColorAndSetWhite(List<String> strings) {
+        List<String> result = new LinkedList<>();
+        for (String s : strings) {
+            result.add(ChatColor.WHITE + replaceColor(s));
+        }
+        return result;
+    }
+
+    public static String deleteColors(String s) {
+        return s.replaceAll("&[0-9a-zA-Z]", "");
+    }
+
     public static String setPlaceholders(String s, String... data) {
         if (data.length <= 1) {
             return s;
@@ -82,43 +96,33 @@ public class StringUtils {
         return "suggest_command";
     }
 
-    static ArrayList<String[]> splitTextParts(String s) {
-        String[] bef_texts = s.split("<.*?>");
-        ArrayList<String> aft_texts = new ArrayList<>();
+    static ArrayList<String[]> translateTextParts(String s) {
+        ArrayList<String> texts = new ArrayList<>();
 
-        for (String text : bef_texts) {
+        for (String text : s.split("<.*?>")) {
             if (!text.equals("")) {
-                aft_texts.add(text);
+                texts.add(text);
             }
         }
 
-        String[] texts = aft_texts.toArray(new String[0]);
-
-        String links = s;
-        for (String s1 : texts) {
-            links = links.replace(s1, ":");
-        }
-        String[] mods = links.split(":");
-
-        for (int i = 0; i < mods.length; i++) {
-            mods[i] = mods[i].replace("<", "");
-            mods[i] = mods[i].replace(">", "");
+        List<String> mods = new ArrayList<>();
+        Matcher m = Pattern.compile("<.*?>").matcher(s);
+        while (m.find()) {
+            mods.add(m.group().replace("<", "").replace(">", ""));
         }
 
-        ArrayList<String[]> result = new ArrayList<>();
+        ArrayList<String[]> hovAndExec = new ArrayList<>();
         for (String mod : mods) {
-            result.add(mod.split(","));
+            hovAndExec.add(mod.split(","));
         }
 
         ArrayList<String[]> res = new ArrayList<>();
-        String exec;
-        for (int i = 0; i < texts.length; i++) {
-            if (result.get(i).length > 1) {
-                exec = result.get(i)[1];
+        for (int i = 0; i < texts.size(); i++) {
+            if (hovAndExec.get(i).length > 1) {
+                res.add(new String[]{texts.get(i), hovAndExec.get(i)[0], hovAndExec.get(i)[1]});
             } else {
-                exec = "";
+                res.add(new String[]{texts.get(i), hovAndExec.get(i)[0], ""});
             }
-            res.add(new String[]{texts[i], result.get(i)[0], exec});
         }
         return res;
     }
@@ -171,6 +175,14 @@ public class StringUtils {
             }
         }
         return false;
+    }
+
+    public static String[] listOfStringsToStringsArray(List<String> strings) {
+        String[] lines = new String[strings.size()];
+        for (int i = 0; i < lines.length; i++) {
+            lines[i] = strings.get(i);
+        }
+        return lines;
     }
 
 }

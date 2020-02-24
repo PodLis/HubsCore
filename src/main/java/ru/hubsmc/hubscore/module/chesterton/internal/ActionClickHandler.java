@@ -7,18 +7,16 @@ import java.util.List;
 
 public class ActionClickHandler implements ClickHandler {
 
-    private List<ItemAction> actions;
+    private ItemAction action;
 
-    public ActionClickHandler(List<ItemAction> actions) {
-        this.actions = actions;
+    public ActionClickHandler(ItemAction action) {
+        this.action = action;
     }
 
     @Override
     public boolean onClick(Player player) {
-        if (actions != null) {
-            for (ItemAction itemAction : actions) {
-                itemAction.execute(player);
-            }
+        if (action != null) {
+            action.execute(player);
         }
         return false;
     }

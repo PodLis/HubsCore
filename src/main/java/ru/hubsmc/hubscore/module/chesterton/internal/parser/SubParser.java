@@ -49,6 +49,9 @@ public class SubParser {
             case "server":
                 if (strings.length > 1)
                     return new ServerChangeItemAction(strings[1]);
+            case "buy":
+                if (strings.length > 1)
+                    return new DonateItemAction(strings[1]);
             default:
                 return new ReturnItemAction(menu);
         }

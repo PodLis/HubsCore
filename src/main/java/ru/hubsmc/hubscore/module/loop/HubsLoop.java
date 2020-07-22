@@ -22,7 +22,6 @@ import ru.hubsmc.hubscore.module.loop.chat.plugins.PermissionsPlugin;
 import ru.hubsmc.hubscore.module.loop.chat.plugins.PluginManager;
 import ru.hubsmc.hubscore.util.ConfigUtils;
 import ru.hubsmc.hubscore.util.JsonConverter;
-import ru.hubsmc.hubscore.util.StringUtils;
 
 import java.util.*;
 
@@ -48,8 +47,6 @@ public class HubsLoop extends CoreModule {
     private ArrayList<ActionBar> actionBars;
     private ArrayList<ChatMessage> chatMessages;
 
-    private static Map<String, RawMessage> helpMessages;
-
     public static Scoreboard EMPTY_BOARD;
     public static App app;
 
@@ -62,12 +59,12 @@ public class HubsLoop extends CoreModule {
     public static List<String> goodIpsAndDomains;
 
     @Override
-    public void onEnable() {
+    public boolean onEnable() {
         loadFiles();
         manager = new PluginManager();
-        PluginUtils.setCommandExecutorAndTabCompleter("help", new HelpCommand());
         logConsole("Successfully hooked into: " + PluginManager.getInstance().getName());
         PluginUtils.registerEventsOfListener(new ChatListener());
+        return true;
     }
 
     @Override
@@ -190,7 +187,7 @@ public class HubsLoop extends CoreModule {
         for (int i = 0; i < chatTexts.length; i++) {
             if (chatIsJson[i]) {
 
-                chatMessages.add(new RawMessage(chatTexts[i], false)); //Hover-Click-able messages
+                chatMessages.add(new RawMessage(chatTexts[i], false, false)); //Hover-Click-able messages
 
             } else {
 
@@ -200,30 +197,6 @@ public class HubsLoop extends CoreModule {
                 }
                 chatMessages.add(new ChatMessage(strings)); //Simple-text messages
 
-            }
-        }
-
-        // help-messages
-        FileConfiguration helpConfiguration = PluginUtils.getConfigInCoreFolder("help");
-        JsonConverter.setHelpHoversExecutes(
-                ConfigUtils.getStringsAndKeys(helpConfiguration.getConfigurationSection("hover"))[0],
-                ConfigUtils.getStringsAndKeys(helpConfiguration.getConfigurationSection("hover"))[1],
-                ConfigUtils.getStringsAndKeys(helpConfiguration.getConfigurationSection("execute"))[0],
-                ConfigUtils.getStringsAndKeys(helpConfiguration.getConfigurationSection("execute"))[1]
-        );
-        helpMessages = new HashMap<>();
-        for (String key : helpConfiguration.getKeys(false)) {
-            if (key.equals("hover") || key.equals("execute"))
-                continue;
-            if (key.equals("menu")) {
-                helpMessages.put(key, new RawMessage(StringUtils.listOfStringsToStringsArray(helpConfiguration.getStringList(key)), true));
-            } else {
-                for (String subKey : helpConfiguration.getConfigurationSection(key).getKeys(false)) {
-                    if (subKey.equals("menu")) {
-                        helpMessages.put(key, new RawMessage(StringUtils.listOfStringsToStringsArray(helpConfiguration.getStringList(key + "." + subKey)), true));
-                    }
-                    helpMessages.put(key + " " + subKey, new RawMessage(StringUtils.listOfStringsToStringsArray(helpConfiguration.getStringList(key + "." + subKey)), true));
-                }
             }
         }
 
@@ -253,15 +226,6 @@ public class HubsLoop extends CoreModule {
 
     public static PermissionsPlugin getChatManager() {
         return manager;
-    }
-
-    public static void sendHelpMessage(String key, Player player) {
-        if (helpMessages.containsKey(key)) helpMessages.get(key).send(player);
-        else helpMessages.get("menu").send(player);
-    }
-
-    public static Set<String> getHelpMessageNames() {
-        return helpMessages.keySet();
     }
 
 }

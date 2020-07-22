@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 import ru.hubsmc.hubscore.HubsCommand;
 import ru.hubsmc.hubscore.Permissions;
 import ru.hubsmc.hubscore.PluginUtils;
@@ -24,7 +25,7 @@ public class ConvertCommand extends HubsCommand {
     }
 
     @Override
-    public boolean onHubsCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onHubsCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         Player player = (Player) sender;
 
@@ -69,7 +70,7 @@ public class ConvertCommand extends HubsCommand {
     }
 
     @Override
-    public List<String> onHubsComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onHubsComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> completionList = new ArrayList<>();
         String partOfCommand;
         List<String> cmds = new ArrayList<>();

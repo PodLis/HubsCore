@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 import ru.hubsmc.hubscore.HubsCommand;
 import ru.hubsmc.hubscore.Permissions;
 
@@ -37,7 +38,7 @@ public class UtilsCommand extends HubsCommand {
     }
 
     @Override
-    public boolean onHubsCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onHubsCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         if (args.length == 0) {
             sendPlaceholderMessage(sender, "help.header");
@@ -175,7 +176,7 @@ public class UtilsCommand extends HubsCommand {
     }
 
     @Override
-    public List<String> onHubsComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onHubsComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> completionList = new ArrayList<>();
         String partOfCommand;
         List<String> cmds = new ArrayList<>();

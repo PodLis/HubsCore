@@ -23,7 +23,12 @@ public enum Permissions {
     CHAT_STRIKETHROUGH("hubs.chat.strikethrough"),
     CHAT_UNDERLINE("hubs.chat.underline"),
     CHAT_ITALIC("hubs.chat.italic"),
-    CHAT_RESET("hubs.chat.reset");
+    CHAT_RESET("hubs.chat.reset"),
+    BONUS("hubs.bonus"),
+    BROADHUBS("hubs.broadhubs"),
+    RABBIT("hubs.rabbit"),
+    VISION("hubs.vision"),
+    STUFF_VIEW("hubs.stuff");
 
     private final String perm;
 

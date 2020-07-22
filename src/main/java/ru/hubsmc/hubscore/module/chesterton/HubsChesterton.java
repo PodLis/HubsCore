@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import ru.hubsmc.hubscore.CoreModule;
 import ru.hubsmc.hubscore.Permissions;
-import ru.hubsmc.hubscore.module.chesterton.event.InventoryEvent;
+import ru.hubsmc.hubscore.PluginUtils;
 import ru.hubsmc.hubscore.module.chesterton.internal.ActionClickHandler;
 import ru.hubsmc.hubscore.module.chesterton.internal.ChestertonInventoryHolder;
 import ru.hubsmc.hubscore.module.chesterton.internal.MenuUtils;
@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static ru.hubsmc.hubscore.PluginUtils.getStringsConfig;
-import static ru.hubsmc.hubscore.PluginUtils.registerEventsOfListener;
 import static ru.hubsmc.hubscore.util.MessageUtils.*;
 import static ru.hubsmc.hubscore.util.ServerUtils.playerIsOnline;
 import static ru.hubsmc.hubscore.util.StringUtils.cutFirstsStrings;
@@ -32,9 +31,10 @@ public class HubsChesterton extends CoreModule {
     private static PlayerHeadItem RETURN_BUTTON;
 
     @Override
-    public void onEnable() {
+    public boolean onEnable() {
         loadFiles();
-        registerEventsOfListener(new InventoryEvent());
+        PluginUtils.setCommandExecutorAndTabCompleter(new MenuCommand());
+        return true;
     }
 
     @Override

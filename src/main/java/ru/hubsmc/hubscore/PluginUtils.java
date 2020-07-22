@@ -193,6 +193,15 @@ public class PluginUtils {
         }
     }
 
+    public static void setCommandExecutorAndTabCompleter(HubsCommand command) {
+        setCommandExecutorAndTabCompleter(command.getName(), command);
+    }
+
+    public static void setCommandExecutorAndTabCompleter(HubsCommand... commands) {
+        for (HubsCommand command : commands)
+            setCommandExecutorAndTabCompleter(command.getName(), command);
+    }
+
     public static void registerEventsOfListener(Listener listener) {
         HubsCore.getInstance().getServer().getPluginManager().registerEvents(listener, HubsCore.getInstance());
     }

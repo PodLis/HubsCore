@@ -10,7 +10,8 @@ import java.util.List;
 public class HubsSecurity extends CoreModule {
 
     @Override
-    public void onEnable() {
+    public boolean onEnable() {
+        return true;
     }
 
     @Override

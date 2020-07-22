@@ -4,14 +4,10 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import ru.hubsmc.hubscore.module.chesterton.HubsChesterton;
 import ru.hubsmc.hubscore.module.chesterton.internal.ActionClickHandler;
-import ru.hubsmc.hubscore.module.chesterton.internal.action.ItemAction;
 import ru.hubsmc.hubscore.module.chesterton.internal.item.CustomItem;
 import ru.hubsmc.hubscore.module.chesterton.internal.item.ExtendedItem;
 import ru.hubsmc.hubscore.module.chesterton.internal.item.PlayerHeadItem;
 import ru.hubsmc.hubscore.module.chesterton.internal.menu.ChestMenu;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class ItemParser {
 
@@ -26,7 +22,7 @@ public class ItemParser {
             if (type.equals("RETURN_BUTTON")) {
                 return HubsChesterton.getReturnButton(menu);
             }
-            material = Material.getMaterial(type);
+            material = Material.getMaterial(type.toUpperCase());
             if (material == null) {
                 material = Material.BEDROCK;
             }
@@ -69,9 +65,13 @@ public class ItemParser {
         customItem.setLore(section.getStringList("lore"));
         customItem.setEnchanted(section.getBoolean("enchanted"));
 
+        if (section.contains("amount"))
+            customItem.setAmount(section.getInt("amount"));
+
         String action = section.getString("on-click");
+        boolean close = section.getBoolean("close");
         if (action != null)
-            customItem.setClickHandler(new ActionClickHandler(SubParser.parseAction(action, menu)));
+            customItem.setClickHandler(new ActionClickHandler(SubParser.parseAction(action, menu), close));
 
         return customItem;
     }

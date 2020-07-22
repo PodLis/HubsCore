@@ -10,8 +10,8 @@ import static ru.hubsmc.hubscore.util.StringUtils.replaceSymbolsAndNull;
 
 public class RawMessage extends ChatMessage {
 
-    public RawMessage(String[] lines, boolean isForHelp) {
-        super(prepareLines(lines, isForHelp));
+    public RawMessage(String[] lines, boolean isForHelp, boolean isForRaw) {
+        super(prepareLines(lines, isForHelp, isForRaw));
     }
 
     @Override
@@ -40,11 +40,11 @@ public class RawMessage extends ChatMessage {
         }
     }
 
-    private static String[] prepareLines(String[] strings, boolean isForHelp) {
+    private static String[] prepareLines(String[] strings, boolean isForHelp, boolean isForRaw) {
         String[] newStrings = new String[strings.length];
         for (int j = 0; j < newStrings.length; j++) {
             if (strings[j].startsWith("<"))
-                newStrings[j] = replaceSymbolsAndNull(JsonConverter.getJsonString(strings[j], isForHelp));
+                newStrings[j] = replaceSymbolsAndNull(JsonConverter.getJsonString(strings[j], isForHelp, isForRaw));
             else newStrings[j] = replaceSymbolsAndNull(JsonConverter.getTextJsonString(strings[j]));
         }
         return newStrings;

@@ -3,7 +3,6 @@ package ru.hubsmc.hubscore.util;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import ru.hubsmc.hubscore.HubsCore;
-import ru.hubsmc.hubscore.PluginUtils;
 import ru.hubsmc.hubscore.exception.IncorrectConfigurationException;
 import ru.hubsmc.hubscore.module.loop.HubsLoop;
 
@@ -54,6 +53,14 @@ public class StringUtils {
         return result;
     }
 
+    public static List<String> replaceColor(String[] strings) {
+        List<String> result = new LinkedList<>();
+        for (String s : strings) {
+            result.add(replaceColor(s));
+        }
+        return result;
+    }
+
     public static List<String> replaceColorAndSetWhite(List<String> strings) {
         List<String> result = new LinkedList<>();
         for (String s : strings) {
@@ -72,6 +79,11 @@ public class StringUtils {
         } else {
             return setPlaceholders(s, Arrays.copyOf(data, data.length - 2)).replaceAll("%" + data[data.length-2] + "%", data[data.length-1]);
         }
+    }
+
+    public static List<String> setPlaceholders(List<String> strings, String... data) {
+        strings.forEach(s -> setPlaceholders(s, data));
+        return strings;
     }
 
     public static String setPlaceholdersPrefixes(String s, String... data) {

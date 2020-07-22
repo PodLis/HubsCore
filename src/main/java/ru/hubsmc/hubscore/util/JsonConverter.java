@@ -10,6 +10,8 @@ public class JsonConverter {
     private static Map<String, String[]> loopExecutes = new HashMap<>();
     private static Map<String, String> helpHovers = new HashMap<>();
     private static Map<String, String[]> helpExecutes = new HashMap<>();
+    private static Map<String, String> rawtextHovers = new HashMap<>();
+    private static Map<String, String[]> rawtextExecutes = new HashMap<>();
 
     public static void setLoopHoversExecutes(String[] hoverNames, String[] hoverValues, String[] executeNames, String[] executeValues) {
         if (hoverNames.length == hoverValues.length && executeNames.length == executeValues.length) {
@@ -37,7 +39,20 @@ public class JsonConverter {
         }
     }
 
-    public static String getJsonString(String chatText, boolean isForHelp) {
+    public static void setRawtextHoversExecutes(String[] hoverNames, String[] hoverValues, String[] executeNames, String[] executeValues) {
+        if (hoverNames.length == hoverValues.length && executeNames.length == executeValues.length) {
+            for (int i = 0; i < hoverNames.length; i++) {
+                JsonConverter.rawtextHovers.put(hoverNames[i], hoverValues[i]);
+            }
+            for (int i = 0; i < executeNames.length; i++) {
+                JsonConverter.rawtextExecutes.put(executeNames[i], StringUtils.splitExecuteMods(executeValues[i]));
+            }
+        } else {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+    }
+
+    public static String getJsonString(String chatText, boolean isForHelp, boolean isForRaw) {
         Map<String, String> hovers;
         Map<String, String[]> executes;
         if (isForHelp) {
@@ -46,6 +61,10 @@ public class JsonConverter {
         } else {
             hovers = loopHovers;
             executes = loopExecutes;
+        }
+        if (isForRaw) {
+            hovers = rawtextHovers;
+            executes = rawtextExecutes;
         }
 
         StringBuilder builder = new StringBuilder();

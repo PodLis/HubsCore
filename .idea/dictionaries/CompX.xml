@@ -2,7 +2,10 @@
   <dictionary name="CompX">
     <words>
       <w>anim</w>
+      <w>broadhubs</w>
       <w>cmds</w>
+      <w>cooldown</w>
+      <w>cooldowns</w>
       <w>displayname</w>
       <w>hubixes</w>
       <w>hubscore</w>
@@ -10,6 +13,7 @@
       <w>hubsval</w>
       <w>mana</w>
       <w>papermc</w>
+      <w>rawtext</w>
       <w>rosenboum</w>
       <w>sendable</w>
       <w>sonatype</w>

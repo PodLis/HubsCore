@@ -22,6 +22,7 @@ public class CustomItem extends ChestertonItem {
     private List<String> lore;
     private boolean enchanted;
     private Color color;
+    private int amount = 1;
 
     public CustomItem(Material material) {
         super(material);
@@ -48,8 +49,13 @@ public class CustomItem extends ChestertonItem {
         this.color = color;
     }
 
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
     @Override
     protected ItemStack setItemData(ItemStack itemStack, Player player) {
+        if (amount != 1) itemStack.setAmount(amount);
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null) {
             return itemStack;

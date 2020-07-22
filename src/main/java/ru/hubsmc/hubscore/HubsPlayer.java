@@ -4,11 +4,14 @@ import org.bukkit.entity.Player;
 import ru.hubsmc.hubscore.module.loop.HubsLoop;
 import ru.hubsmc.hubscore.module.loop.board.ScoreboardHolder;
 
+import java.util.HashSet;
+
 public class HubsPlayer {
 
     private Player player;
     private ScoreboardHolder scoreboardHolder;
     private int dollars, mana, max, regen;
+    private HashSet<String> statuses = new HashSet<>();
 
     HubsPlayer(Player player, int dollars, int mana, int max, int regen) {
         this.player = player;
@@ -73,6 +76,23 @@ public class HubsPlayer {
     public void setRegen(int regen) {
         this.regen = regen;
         updateNormalVars();
+    }
+
+    public void addTempStatus(String data, int seconds) {
+        statuses.add(data);
+        PluginUtils.runTaskLater(() -> statuses.remove(data), seconds * 20);
+    }
+
+    public void addStatus(String data) {
+        statuses.add(data);
+    }
+
+    public void removeStatus(String data) {
+        statuses.add(data);
+    }
+
+    public boolean hasStatus(String data) {
+        return statuses.contains(data);
     }
 
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 abstract public class CoreModule {
 
-    abstract public void onEnable();
+    abstract public boolean onEnable();
 
     abstract public void onDisable();
 

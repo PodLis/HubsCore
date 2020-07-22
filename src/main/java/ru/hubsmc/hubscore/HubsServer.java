@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 
 public interface HubsServer {
 
-    void afterCoreStart();
+    boolean afterCoreStart();
 
     void beforeCoreStop();
 

@@ -41,6 +41,37 @@ commands:
   help:
     description: The help command
     usage: <command>
+  donate:
+    usage: <command>
+  cart:
+    usage: <command>
+  changelog:
+    usage: <command>
+  bonus:
+    usage: <command>
+  broadhubs:
+    usage: <command>
+    permission: "hubs.broadhubs"
+  rabbit:
+    usage: <command>
+    permission: "hubs.rabbit"
+  vision:
+    usage: <command>
+    permission: "hubs.vision"
+  hubs:
+    usage: <command>
+  about:
+    usage: <command>
+  discord:
+    usage: <command>
+  vk:
+    usage: <command>
+  free:
+    usage: <command>
+  kits:
+    usage: <command>
+  menu:
+    usage: <command>
 
 permissions:
   hubscore.*:
@@ -116,4 +147,14 @@ permissions:
   hubs.chat.italic:
     default: false
   hubs.chat.reset:
+    default: false
+  hubs.bonus:
+    default: false
+  hubs.broadhubs:
+    default: false
+  hubs.rabbit:
+    default: false
+  hubs.vision:
+    default: false
+  hubs.stuff:
     default: false

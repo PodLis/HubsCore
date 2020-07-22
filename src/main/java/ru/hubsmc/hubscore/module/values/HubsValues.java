@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
@@ -40,7 +41,7 @@ public class HubsValues extends CoreModule {
     private static ValuesPlayerData specialDataStore;
 
     @Override
-    public void onEnable() {
+    public boolean onEnable() {
         loadFiles();
 
         PluginUtils.setCommandExecutorAndTabCompleter("mana", new ManaCommand());
@@ -48,8 +49,10 @@ public class HubsValues extends CoreModule {
         PluginUtils.setCommandExecutorAndTabCompleter("convert", new ConvertCommand());
         PluginUtils.setCommandExecutorAndTabCompleter("top", new TopCommand());
         PluginUtils.setCommandExecutorAndTabCompleter("update", new UpdateCommand());
+        PluginUtils.setCommandExecutorAndTabCompleter(new BonusCommand());
 
         online = true;
+        return true;
     }
 
     @Override

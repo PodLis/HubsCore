@@ -1,9 +1,10 @@
 package ru.hubsmc.hubscore.module.loop.action;
 
-import net.minecraft.server.v1_15_R1.ChatMessageType;
-import net.minecraft.server.v1_15_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_15_R1.PacketPlayOutChat;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import net.minecraft.server.v1_16_R1.ChatMessageType;
+import net.minecraft.server.v1_16_R1.IChatBaseComponent;
+import net.minecraft.server.v1_16_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_16_R1.PacketPlayOutChat;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import ru.hubsmc.hubscore.module.loop.ToPlayerSendable;
 
@@ -11,7 +12,7 @@ import java.util.Collection;
 
 public class ActionBar implements ToPlayerSendable {
 
-    private PacketPlayOutChat packet;
+    private IChatBaseComponent component;
 
     private int displayTime;
 
@@ -20,19 +21,21 @@ public class ActionBar implements ToPlayerSendable {
     }
 
     public ActionBar(String message, int displayTime) {
-        packet = new PacketPlayOutChat(ChatSerializer.a("{\"text\":\"" + message + "\"}"), ChatMessageType.GAME_INFO);
+        component = ChatSerializer.a("{\"text\":\"" + message + "\"}");
         this.displayTime = Math.max(displayTime, 3);
     }
 
     @Override
     public void send(Collection<? extends Player> players) {
         for (Player player : players) {
+            PacketPlayOutChat packet = new PacketPlayOutChat(component, ChatMessageType.GAME_INFO, player.getUniqueId());
             ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
         }
     }
 
     @Override
     public void send(Player player) {
+        PacketPlayOutChat packet = new PacketPlayOutChat(component, ChatMessageType.GAME_INFO, player.getUniqueId());
         ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
     }
 }

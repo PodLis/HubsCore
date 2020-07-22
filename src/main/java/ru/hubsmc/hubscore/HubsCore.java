@@ -1,11 +1,13 @@
 package ru.hubsmc.hubscore;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import ru.hubsmc.hubscore.listener.InventoryEvent;
 import ru.hubsmc.hubscore.listener.ItemInteractEvent;
 import ru.hubsmc.hubscore.listener.JoinEvent;
 import ru.hubsmc.hubscore.listener.LeaveEvent;
@@ -77,7 +79,8 @@ public final class HubsCore extends JavaPlugin {
         coreModules.put("HubsEssentials", new HubsEssentials());
         coreModules.put("HubsSecurity", new HubsSecurity());
         for (CoreModule module : coreModules.values()) {
-            module.onEnable();
+            if (!module.onEnable())
+                Bukkit.shutdown();
         }
 
         // register basic events and basic commands
@@ -86,11 +89,13 @@ public final class HubsCore extends JavaPlugin {
             registerEventsOfListener(new LeaveEvent());
         }
         registerEventsOfListener(new ItemInteractEvent());
+        registerEventsOfListener(new InventoryEvent());
         setCommandExecutorAndTabCompleter("hubscore", new Commands());
         setCommandExecutorAndTabCompleter("utils", new UtilsCommand());
 
         // enable HubsServer plugin
-        server.afterCoreStart();
+        if (!server.afterCoreStart())
+            Bukkit.shutdown();
 
         // load a scheduler (run onSchedule() methods of all modules and a server)
         mainScheduler.scheduleSyncRepeatingTask(this, () -> {

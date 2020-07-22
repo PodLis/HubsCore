@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import ru.hubsmc.hubscore.exception.ConfigurationPartMissingException;
 import ru.hubsmc.hubscore.util.MessageUtils;
 import java.util.List;
@@ -32,7 +33,7 @@ public abstract class HubsCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public final boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public final boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         try {
             namespace = MessageUtils.getCommandNamespace(name);
             if (namespace == null) {
@@ -75,16 +76,16 @@ public abstract class HubsCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public final List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public final List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (permission != null && !permission.senderHasPerm(sender)) {
             return null;
         }
         return onHubsComplete(sender, command, alias, args);
     }
 
-    abstract public boolean onHubsCommand(CommandSender sender, Command command, String label, String[] args);
+    abstract public boolean onHubsCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args);
 
-    abstract public List<String> onHubsComplete(CommandSender sender, Command command, String alias, String[] args);
+    abstract public List<String> onHubsComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args);
 
     protected final void sendPlaceholderMessage(CommandSender sender, String path, String... data) {
         sendMessage(sender, setPlaceholdersPrefixes(getNamespaceString(namespace, path, "command-messages." + name), data));
@@ -92,6 +93,10 @@ public abstract class HubsCommand implements CommandExecutor, TabCompleter {
 
     protected final void sendDefaultUsage(CommandSender sender) {
         sendWrongUsageMessage(sender, usage);
+    }
+
+    public String getName() {
+        return name;
     }
 
 }

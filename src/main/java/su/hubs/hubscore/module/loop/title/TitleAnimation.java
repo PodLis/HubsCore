@@ -1,0 +1,29 @@
+package su.hubs.hubscore.module.loop.title;
+
+import org.bukkit.entity.Player;
+import su.hubs.hubscore.exception.IncorrectConfigurationException;
+import su.hubs.hubscore.util.ConfigUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class TitleAnimation {
+
+    private List<HubsTitle> titleFrames = new ArrayList<>();
+    private boolean repeat;
+    private int repeatFrom;
+
+    public TitleAnimation(List<String> animSTitleList, boolean repeat, int repeatFrom) throws IncorrectConfigurationException {
+        this.repeat = repeat;
+        this.repeatFrom = repeatFrom;
+        for (String line : animSTitleList) {
+            titleFrames.add(ConfigUtils.parseTitle(line));
+        }
+    }
+
+    public void play(Player player, Predicate<Player> isNeedToStop) {
+        new TitleTask(player, titleFrames, repeat, repeatFrom, isNeedToStop);
+    }
+
+}

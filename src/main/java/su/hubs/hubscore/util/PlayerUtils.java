@@ -5,7 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
-import su.hubs.hubscore.Permissions;
+import su.hubs.hubscore.GlobalPermission;
 import su.hubs.hubscore.module.chesterton.internal.menu.ChestMenu;
 import su.hubs.hubscore.module.loop.chat.plugins.PluginManager;
 
@@ -39,25 +39,25 @@ public class PlayerUtils {
             return "";
         }
         String newstring = string;
-        if (Permissions.CHAT_COLOR.senderHasPerm(p)) {
+        if (GlobalPermission.CHAT_COLOR.senderHasPerm(p)) {
             newstring = chatColorPattern.matcher(newstring).replaceAll("\u00A7$1");
         }
-        if (Permissions.CHAT_MAGIC.senderHasPerm(p)) {
+        if (GlobalPermission.CHAT_MAGIC.senderHasPerm(p)) {
             newstring = chatMagicPattern.matcher(newstring).replaceAll("\u00A7$1");
         }
-        if (Permissions.CHAT_BOLD.senderHasPerm(p)) {
+        if (GlobalPermission.CHAT_BOLD.senderHasPerm(p)) {
             newstring = chatBoldPattern.matcher(newstring).replaceAll("\u00A7$1");
         }
-        if (Permissions.CHAT_STRIKETHROUGH.senderHasPerm(p)) {
+        if (GlobalPermission.CHAT_STRIKETHROUGH.senderHasPerm(p)) {
             newstring = chatStrikethroughPattern.matcher(newstring).replaceAll("\u00A7$1");
         }
-        if (Permissions.CHAT_UNDERLINE.senderHasPerm(p)) {
+        if (GlobalPermission.CHAT_UNDERLINE.senderHasPerm(p)) {
             newstring = chatUnderlinePattern.matcher(newstring).replaceAll("\u00A7$1");
         }
-        if (Permissions.CHAT_ITALIC.senderHasPerm(p)) {
+        if (GlobalPermission.CHAT_ITALIC.senderHasPerm(p)) {
             newstring = chatItalicPattern.matcher(newstring).replaceAll("\u00A7$1");
         }
-        if (Permissions.CHAT_RESET.senderHasPerm(p)) {
+        if (GlobalPermission.CHAT_RESET.senderHasPerm(p)) {
             newstring = chatResetPattern.matcher(newstring).replaceAll("\u00A7$1");
         }
         return newstring;

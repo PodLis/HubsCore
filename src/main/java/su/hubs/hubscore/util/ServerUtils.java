@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import su.hubs.hubscore.Permissions;
+import su.hubs.hubscore.GlobalPermission;
 import su.hubs.hubscore.PluginUtils;
 import su.hubs.hubscore.module.loop.HubsLoop;
 import su.hubs.hubscore.module.loop.chat.ChatLogger;
@@ -59,7 +59,7 @@ public class ServerUtils {
     }
 
     public static boolean checkStringForAds(String msg, Player p) {
-        if (Permissions.CHAT_BYPASS.senderHasPerm(p)) {
+        if (GlobalPermission.CHAT_BYPASS.senderHasPerm(p)) {
             return false;
         }
         if (StringUtils.checkStringForIPPattern(msg) || StringUtils.checkStringForWebPattern(msg)) {

@@ -5,11 +5,10 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import su.hubs.hubscore.CoreModule
 import su.hubs.hubscore.PluginUtils
-import su.hubs.hubscore.module.essentials.abilities.RabbitCommand
-import su.hubs.hubscore.module.essentials.abilities.VisionCommand
 import su.hubs.hubscore.module.essentials.info.*
 import su.hubs.hubscore.module.essentials.menus.ShowkitCommand
 import su.hubs.hubscore.module.essentials.social.BroadhubsCommand
+import su.hubs.hubscore.module.essentials.social.LobbyCommand
 import su.hubs.hubscore.module.essentials.survival.KitCommand
 import su.hubs.hubscore.module.loop.chat.RawMessage
 import su.hubs.hubscore.util.ConfigUtils
@@ -21,8 +20,6 @@ class HubsEssentials : CoreModule() {
     override fun onEnable(): Boolean {
         loadFiles()
         PluginUtils.setCommandExecutorAndTabCompleter(
-                RabbitCommand(),
-                VisionCommand(),
                 AboutCommand(),
                 ChangelogCommand(),
                 DiscordCommand(),
@@ -33,7 +30,8 @@ class HubsEssentials : CoreModule() {
                 VkCommand(),
                 BroadhubsCommand(),
                 KitCommand(),
-                ShowkitCommand()
+                ShowkitCommand(),
+                LobbyCommand()
         )
         return true
     }

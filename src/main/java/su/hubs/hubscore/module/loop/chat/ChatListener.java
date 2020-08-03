@@ -5,7 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import su.hubs.hubscore.Permissions;
+import su.hubs.hubscore.GlobalPermission;
 import su.hubs.hubscore.PluginUtils;
 import su.hubs.hubscore.module.loop.HubsLoop;
 import su.hubs.hubscore.util.ServerUtils;
@@ -20,7 +20,7 @@ public class ChatListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onChat(final AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        if (!Permissions.CHAT_ALLOW.senderHasPerm(player)) {
+        if (!GlobalPermission.CHAT_ALLOW.senderHasPerm(player)) {
             MessageUtils.sendMessage(player, StringUtils.setPlaceholdersPrefixes(PluginUtils.getStringsConfig().getString("chat.chat-messages.no-perm")));
             event.setCancelled(true);
             return;
@@ -36,7 +36,7 @@ public class ChatListener implements Listener {
             return;
         }
 
-        if (chatMessage.startsWith("!") && Permissions.CHAT_GLOBAL.senderHasPerm(player)) {
+        if (chatMessage.startsWith("!") && GlobalPermission.CHAT_GLOBAL.senderHasPerm(player)) {
             chatMessage = chatMessage.replaceFirst("!", "");
             format = replaceColor(HubsLoop.GLOBAL_FORMAT);
             global = true;

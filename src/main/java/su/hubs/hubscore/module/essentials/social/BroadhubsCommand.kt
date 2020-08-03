@@ -4,10 +4,10 @@ import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import su.hubs.hubscore.HubsCommand
-import su.hubs.hubscore.Permissions
+import su.hubs.hubscore.GlobalPermission
 import su.hubs.hubscore.util.StringUtils
 
-class BroadhubsCommand : HubsCommand("broadhubs", Permissions.BROADHUBS, false, 0) {
+class BroadhubsCommand : HubsCommand("broadhubs", GlobalPermission.BROADHUBS, false, 0) {
 
     override fun onHubsCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         return true.also {Bukkit.getServer().broadcastMessage(StringUtils.replaceColor((StringBuilder().also {

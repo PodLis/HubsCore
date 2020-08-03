@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import su.hubs.hubscore.CoreModule;
 import su.hubs.hubscore.HubsCore;
-import su.hubs.hubscore.Permissions;
+import su.hubs.hubscore.GlobalPermission;
 import su.hubs.hubscore.PluginUtils;
 import su.hubs.hubscore.module.values.api.ValuesPlayerData;
 import su.hubs.hubscore.module.values.api.API;
@@ -93,7 +93,7 @@ public class HubsValues extends CoreModule {
     @Override
     public void onSchedule(byte min) {
         API.increaseAllOnlineMana();
-        if (min % OFFLINE_COEFFICIENT == 0) API.increaseAllOfflineMana();
+        if (HubsCore.LOBBY_LIKE && min % OFFLINE_COEFFICIENT == 0) API.increaseAllOfflineMana();
     }
 
     @Override
@@ -108,7 +108,7 @@ public class HubsValues extends CoreModule {
 
             case "check":
 
-                if (!Permissions.VALUE_CHECK.senderHasPerm(sender)) {
+                if (!GlobalPermission.VALUE_CHECK.senderHasPerm(sender)) {
                     MessageUtils.sendNoPermMessage(sender, "check");
                     return true;
                 }
@@ -144,7 +144,7 @@ public class HubsValues extends CoreModule {
             case "add":
             case "remove":
 
-                if (!Permissions.VALUE_CHANGE.senderHasPerm(sender)) {
+                if (!GlobalPermission.VALUE_CHANGE.senderHasPerm(sender)) {
                     MessageUtils.sendNoPermMessage(sender, args[3].toLowerCase());
                     return true;
                 }

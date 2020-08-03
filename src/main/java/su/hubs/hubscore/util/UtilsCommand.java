@@ -19,7 +19,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import su.hubs.hubscore.HubsCommand;
-import su.hubs.hubscore.Permissions;
+import su.hubs.hubscore.GlobalPermission;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +33,7 @@ import static su.hubs.hubscore.PluginUtils.getFileToSaveParse;
 public class UtilsCommand extends HubsCommand {
 
     public UtilsCommand() {
-        super("utils", Permissions.UTILS, true, 0);
+        super("utils", GlobalPermission.UTILS, true, 0);
     }
 
     @Override

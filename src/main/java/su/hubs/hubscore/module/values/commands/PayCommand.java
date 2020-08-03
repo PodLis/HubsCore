@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import su.hubs.hubscore.HubsCommand;
-import su.hubs.hubscore.Permissions;
+import su.hubs.hubscore.GlobalPermission;
 import su.hubs.hubscore.module.values.event.PayEvent;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import static su.hubs.hubscore.module.values.api.API.*;
 public class PayCommand extends HubsCommand {
 
     public PayCommand() {
-        super("pay", Permissions.PAY_NORMAL, true, 2);
+        super("pay", GlobalPermission.PAY_NORMAL, true, 2);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class PayCommand extends HubsCommand {
         }
 
         if (args[0].equals("*")) {
-            if (!Permissions.PAY_ALL.senderHasPerm(player)) {
+            if (!GlobalPermission.PAY_ALL.senderHasPerm(player)) {
                 sendPlaceholderMessage(sender, "not-to-all");
                 return true;
             }
@@ -97,7 +97,7 @@ public class PayCommand extends HubsCommand {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 cmds.add(player.getName());
             }
-            if (Permissions.PAY_NORMAL.senderHasPerm(sender))
+            if (GlobalPermission.PAY_NORMAL.senderHasPerm(sender))
                 cmds.add("*");
             partOfCommand = args[0];
 

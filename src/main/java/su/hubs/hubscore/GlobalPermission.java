@@ -3,7 +3,7 @@ package su.hubs.hubscore;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public enum Permissions {
+public enum GlobalPermission implements HubsPermission {
 
     RELOAD("hubscore.reload"),
     UTILS("hubscore.utils"),
@@ -26,16 +26,15 @@ public enum Permissions {
     CHAT_RESET("hubs.chat.reset"),
     BONUS("hubs.bonus"),
     BROADHUBS("hubs.broadhubs"),
-    RABBIT("hubs.rabbit"),
-    VISION("hubs.vision"),
     STUFF_VIEW("hubs.stuff");
 
     private final String perm;
 
-    Permissions(String perm) {
+    GlobalPermission(String perm) {
         this.perm = perm;
     }
 
+    @Override
     public boolean senderHasPerm(CommandSender sender) {
         if (sender instanceof Player) {
             return sender.hasPermission(this.perm);
@@ -43,4 +42,8 @@ public enum Permissions {
         return true;
     }
 
+    @Override
+    public String getPerm() {
+        return perm;
+    }
 }

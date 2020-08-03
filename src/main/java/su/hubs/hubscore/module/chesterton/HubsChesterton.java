@@ -6,10 +6,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import su.hubs.hubscore.CoreModule;
-import su.hubs.hubscore.Permissions;
+import su.hubs.hubscore.GlobalPermission;
 import su.hubs.hubscore.PluginUtils;
 import su.hubs.hubscore.module.chesterton.internal.ActionClickHandler;
-import su.hubs.hubscore.module.chesterton.MenuCommand;
 import su.hubs.hubscore.module.chesterton.internal.ChestertonInventoryHolder;
 import su.hubs.hubscore.module.chesterton.internal.MenuUtils;
 import su.hubs.hubscore.module.chesterton.internal.action.ReturnItemAction;
@@ -75,7 +74,7 @@ public class HubsChesterton extends CoreModule {
         }
 
         if (args[0].equalsIgnoreCase("open")) {
-            if (!Permissions.CHESTERTON_OPEN.senderHasPerm(sender)) {
+            if (!GlobalPermission.CHESTERTON_OPEN.senderHasPerm(sender)) {
                 MessageUtils.sendNoPermMessage(sender, args[0]);
                 return true;
             }

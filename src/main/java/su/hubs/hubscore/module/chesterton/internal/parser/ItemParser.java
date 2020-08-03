@@ -41,7 +41,7 @@ public class ItemParser {
                 customItem = new CustomItem(material);
                 String color = section.getString("color");
                 if (color != null) {
-                    customItem.setColor(SubParser.parseColor(color));
+                    customItem.setColor(SubParser.INSTANCE.parseColor(color));
                 }
                 break;
             }
@@ -71,7 +71,7 @@ public class ItemParser {
         String action = section.getString("on-click");
         boolean close = section.getBoolean("close");
         if (action != null)
-            customItem.setClickHandler(new ActionClickHandler(SubParser.parseAction(action, menu), close));
+            customItem.setClickHandler(new ActionClickHandler(SubParser.INSTANCE.parseAction(action, menu), close));
 
         return customItem;
     }
@@ -95,19 +95,19 @@ public class ItemParser {
             case TIPPED_ARROW:
             {
                 if (section.getConfigurationSection("potion") != null)
-                    extendedItem.setPotionData(SubParser.parsePotionData(section.getConfigurationSection("potion")));
+                    extendedItem.setPotionData(SubParser.INSTANCE.parsePotionData(section.getConfigurationSection("potion")));
                 break;
             }
             case ENCHANTED_BOOK:
             {
                 if (section.getConfigurationSection("storage") != null)
-                    extendedItem.setStoredEnchantments(SubParser.parseEnchantments(section.getConfigurationSection("storage")));
+                    extendedItem.setStoredEnchantments(SubParser.INSTANCE.parseEnchantments(section.getConfigurationSection("storage")));
                 break;
             }
             default:
             {
                 if (section.getConfigurationSection("enchantments") != null)
-                    extendedItem.setEnchantments(SubParser.parseEnchantments(section.getConfigurationSection("enchantments")));
+                    extendedItem.setEnchantments(SubParser.INSTANCE.parseEnchantments(section.getConfigurationSection("enchantments")));
                 break;
             }
         }

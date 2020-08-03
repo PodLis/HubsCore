@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import su.hubs.hubscore.HubsCommand;
-import su.hubs.hubscore.Permissions;
+import su.hubs.hubscore.GlobalPermission;
 import su.hubs.hubscore.PluginUtils;
 import su.hubs.hubscore.module.values.HubsValues;
 import su.hubs.hubscore.util.MessageUtils;
@@ -21,7 +21,7 @@ import static su.hubs.hubscore.module.values.api.API.*;
 public class ConvertCommand extends HubsCommand {
 
     public ConvertCommand() {
-        super("convert", Permissions.CONVERT, true, 1);
+        super("convert", GlobalPermission.CONVERT, true, 1);
     }
 
     @Override

@@ -4,14 +4,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import su.hubs.hubscore.HubsCommand;
-import su.hubs.hubscore.Permissions;
+import su.hubs.hubscore.GlobalPermission;
 
 import java.util.List;
 
 public class TopCommand extends HubsCommand {
 
     public TopCommand() {
-        super("top", Permissions.TOP, false, 0);
+        super("top", GlobalPermission.TOP, false, 0);
     }
 
     @Override

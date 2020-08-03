@@ -33,6 +33,7 @@ public final class HubsCore extends JavaPlugin {
     public static String CORE_PREFIX; // chat.prefixes.hubscore in strings.yml
     public static ConfigurationSection commonMessages; // chat.common-messages in strings.yml
     public static boolean LOBBY_LIKE; // is-lobby-like in config.yml of coreFolder
+    private static FileConfiguration cooldowns; // command cooldowns in cooldowns.yml
 
     private static HubsCore instance;
 
@@ -64,11 +65,14 @@ public final class HubsCore extends JavaPlugin {
         interactItemMap = new HashMap<>();
         serverPluginsServerNamesMap = PluginUtils.getServerMap();
 
-        // register a way to change server
+        // register a way to change server and permissions
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+        PluginUtils.registerAllPermissions(GlobalPermission.values());
+        PluginUtils.registerAllPermissions(server.getServerPermissions());
 
-        // strings.yml loads
+        // strings.yml and cooldowns.yml loads
         PluginUtils.reloadStrings();
+        cooldowns = PluginUtils.getConfigInFolder(mainFolder, "cooldowns");
 
         // modules enabling
         coreModules = new HashMap<>();
@@ -187,6 +191,14 @@ public final class HubsCore extends JavaPlugin {
 
     boolean isPlayerOnHubs(Player player) {
         return hubsPlayerMap.containsKey(player);
+    }
+
+    public static long getCooldownTime(String uuid, String command) {
+        return cooldowns.getLong(uuid + "." + command, 0L);
+    }
+
+    public static void setCooldownTime(String uuid, String command) {
+        cooldowns.set(uuid + "." + command, System.currentTimeMillis());
     }
 
 }

@@ -6,7 +6,7 @@
 
     <groupId>su.hubs</groupId>
     <artifactId>HubsCore</artifactId>
-    <version>0.9.7</version>
+    <version>0.9.8</version>
     <packaging>jar</packaging>
 
     <name>HubsCore</name>

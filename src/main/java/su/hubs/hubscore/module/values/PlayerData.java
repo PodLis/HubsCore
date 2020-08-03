@@ -2,6 +2,10 @@ package su.hubs.hubscore.module.values;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class PlayerData {
 
@@ -68,6 +72,10 @@ public class PlayerData {
         }
     }
 
+    public void insertAnotherRecord(String UUID, String[] strings, int[] integers, double[] doubles) {
+        insert(UUID, strings, integers, doubles);
+    }
+
     public void createAccount(String UUID) {
         insert(UUID, stringPrimalValues, intPrimalValues, doublePrimalValues);
     }
@@ -76,8 +84,25 @@ public class PlayerData {
         delete(UUID);
     }
 
+    public void deleteRecord(String UUID, String column, String key) {
+        deleteWithKey(UUID, column, key);
+    }
+
 
     // data-safe requests
+
+    public List<String> selectAllStringsValues(String uuid, String column) {
+        try {
+            ResultSet rs = manager.Request("SELECT " + column + " FROM " + TABLE_NAME + " WHERE " + C_UUID + " = '" + uuid + "'");
+            List<String> ans = new ArrayList<>(Collections.emptyList());
+            while (rs.next())
+                ans.add(rs.getString(1));
+            return ans;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public String selectStringValue(String uuid, String column) {
         try {
@@ -115,6 +140,49 @@ public class PlayerData {
     public boolean selectExist(String uuid) {
         try {
             ResultSet rs = manager.Request("SELECT * FROM " + TABLE_NAME + " WHERE " + C_UUID + " = '" + uuid + "'");
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public String selectStringValue(String uuid, String keyColumn, String key, String column) {
+        try {
+            ResultSet rs = manager.Request("SELECT " + column + " FROM " + TABLE_NAME + " WHERE " + C_UUID + " = '" + uuid + "' and " + keyColumn + " = '" + key + "'");
+            rs.next();
+            return rs.getString(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public int selectIntValue(String uuid, String keyColumn, String key, String column) {
+        try {
+            ResultSet rs = manager.Request("SELECT " + column + " FROM " + TABLE_NAME + " WHERE " + C_UUID + " = '" + uuid + "' and " + keyColumn + " = '" + key + "'");
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public double selectDoubleValue(String uuid, String keyColumn, String key, String column) {
+        try {
+            ResultSet rs = manager.Request("SELECT " + column + " FROM " + TABLE_NAME + " WHERE " + C_UUID + " = '" + uuid + "' and " + keyColumn + " = '" + key + "'");
+            rs.next();
+            return rs.getDouble(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public boolean selectExist(String uuid, String keyColumn, String key) {
+        try {
+            ResultSet rs = manager.Request("SELECT * FROM " + TABLE_NAME + " WHERE " + C_UUID + " = '" + uuid + "' and " + keyColumn + " = '" + key + "'");
             return rs.next();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -160,6 +228,10 @@ public class PlayerData {
 
     protected void delete(String uuid) {
         manager.Execute("delete from " + TABLE_NAME + " where " + C_UUID + " = '" + uuid + "'");
+    }
+
+    protected void deleteWithKey(String uuid, String column, String key) {
+        manager.Execute("delete from " + TABLE_NAME + " where " + C_UUID + " = '" + uuid + "' and " + column + " = '" + key + "'");
     }
 
 }

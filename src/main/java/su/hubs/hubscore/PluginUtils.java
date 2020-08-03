@@ -5,15 +5,17 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.InvalidDescriptionException;
-import org.bukkit.plugin.InvalidPluginException;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.*;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 import su.hubs.hubscore.exception.CommandNotFoundException;
 import su.hubs.hubscore.exception.ConfigurationPartMissingException;
@@ -25,8 +27,10 @@ import su.hubs.hubscore.module.loop.item.ItemInteractAction;
 import su.hubs.hubscore.util.StringUtils;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.Map;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -106,6 +110,10 @@ public class PluginUtils {
         return getConfigInFolder(HubsCore.getInstance().coreFolder, fileName);
     }
 
+    public static FileConfiguration getConfigInServerFolder(String fileName, HubsServer server) {
+        return getConfigInFolder(new File(getMainFolder(), server.getStringData("folder")), fileName);
+    }
+
     public static FileConfiguration getStringsConfig() {
         return getConfigInFolder(HubsCore.getInstance().coreFolder, "strings");
     }
@@ -173,6 +181,61 @@ public class PluginUtils {
     }
 
     //
+    // great commandRegister system without plugin.yml (thanks ELCHILEN0)
+
+    public static void registerCommand(JavaPlugin plugin, String name, String... aliases) {
+        registerCommand(plugin, name, null, aliases);
+    }
+
+    public static void registerCommand(JavaPlugin plugin, String name, HubsPermission perm, String... aliases) {
+        PluginCommand command = getCommand(name, plugin);
+        if (perm != null)
+            command.setPermission(perm.getPerm());
+        if (aliases != null && aliases.length > 0)
+            command.setAliases(Arrays.asList(aliases));
+        getCommandMap().register(plugin.getDescription().getName(), command);
+    }
+
+    private static PluginCommand getCommand(String name, Plugin plugin) {
+        PluginCommand command = null;
+        try {
+            Constructor<PluginCommand> c = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
+            c.setAccessible(true);
+            command = c.newInstance(name, plugin);
+        } catch (SecurityException | IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        return command;
+    }
+
+    private static CommandMap getCommandMap() {
+        CommandMap commandMap = null;
+        try {
+            if (Bukkit.getPluginManager() instanceof SimplePluginManager) {
+                Field f = SimplePluginManager.class.getDeclaredField("commandMap");
+                f.setAccessible(true);
+                commandMap = (CommandMap) f.get(Bukkit.getPluginManager());
+            }
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return commandMap;
+    }
+
+    //
+    // great permissionRegister system without plugin.yml (thanks somebody once told me)
+
+    static void registerAllPermissions(HubsPermission[] perms) {
+        PluginManager pm = HubsCore.getInstance().getServer().getPluginManager();
+        Set<Permission> permissions = pm.getPermissions();
+        for (HubsPermission permission : perms) {
+            Permission playerPermission = new Permission(permission.getPerm());
+            if (!permissions.contains(playerPermission))
+                pm.addPermission(playerPermission);
+        }
+    }
+
+    //
     // server-subs methods
 
     public static void setCommandExecutorAndTabCompleter(String label, CommandExecutor command) {
@@ -210,8 +273,20 @@ public class PluginUtils {
         Bukkit.getScheduler().scheduleSyncDelayedTask(HubsCore.getInstance(), runnable);
     }
 
-    public static void runTaskLater(Runnable runnable, long l) {
-        Bukkit.getScheduler().runTaskLater(HubsCore.getInstance(), runnable, l);
+    public static BukkitTask runTaskLater(Runnable runnable, long l) {
+        return Bukkit.getScheduler().runTaskLater(HubsCore.getInstance(), runnable, l);
+    }
+
+    public static BukkitTask runTaskTimer(Runnable runnable, long delay, long period) {
+        return Bukkit.getScheduler().runTaskTimer(HubsCore.getInstance(), runnable, delay, period);
+    }
+
+    public static void cancelTask(BukkitTask task) {
+        Bukkit.getScheduler().cancelTask(task.getTaskId());
+    }
+
+    public static boolean isQueued(BukkitTask task) {
+        return Bukkit.getScheduler().isQueued(task.getTaskId());
     }
 
     public static BossBar createBossBar(String text, BarColor color, BarStyle style) {

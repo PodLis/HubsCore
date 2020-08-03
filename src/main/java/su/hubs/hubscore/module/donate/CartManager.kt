@@ -63,7 +63,7 @@ object CartManager {
                             itemMeta.isUnbreakable = subSection.getBoolean("unbreakable")
                             itemStack.itemMeta = itemMeta
                             if (subSection.contains("enchantments"))
-                                itemStack.addUnsafeEnchantments(SubParser.parseEnchantments(subSection.getConfigurationSection("enchantments")))
+                                itemStack.addUnsafeEnchantments(SubParser.parseEnchantments(subSection.getConfigurationSection("enchantments")!!))
 
                             player.inventory.addItem(itemStack)
                         }

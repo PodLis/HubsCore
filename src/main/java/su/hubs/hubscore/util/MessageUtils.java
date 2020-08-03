@@ -3,6 +3,7 @@ package su.hubs.hubscore.util;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import su.hubs.hubscore.HubsCore;
+import su.hubs.hubscore.HubsServer;
 import su.hubs.hubscore.PluginUtils;
 import su.hubs.hubscore.exception.ConfigurationPartMissingException;
 
@@ -20,6 +21,10 @@ public class MessageUtils {
 
     public static ConfigurationSection getCommandNamespace(String command) {
         return PluginUtils.getStringsConfig().getConfigurationSection("chat.command-messages." + command);
+    }
+
+    public static ConfigurationSection getServerCommandNamespace(String command, HubsServer server) {
+        return PluginUtils.getConfigInServerFolder("strings", server).getConfigurationSection("chat.command-messages." + command);
     }
 
 
@@ -57,6 +62,26 @@ public class MessageUtils {
 
     public static void sendNotEnoughHubixesMessage(CommandSender sender) {
         sendCommonMessage(sender, "not-enough-hubixes");
+    }
+
+    public static void sendNotEnoughDollarsMessage(CommandSender sender, int need) {
+        sendCommonMessage(sender, "not-enough-dollars", "dollars", "" + need);
+    }
+
+    public static void sendNotEnoughManaMessage(CommandSender sender, int need) {
+        sendCommonMessage(sender, "not-enough-mana", "mana", "" + need);
+    }
+
+    public static void sendPleaseWaitMessage(CommandSender sender, int seconds) {
+        sendCommonMessage(sender, "wait", "time", "" + seconds);
+    }
+
+    public static void sendImpatientPlayerMessage(CommandSender sender) {
+        sendCommonMessage(sender, "impatient");
+    }
+
+    public static void sendCooldownMessage(CommandSender sender, long timeMillis) {
+        sendCommonMessage(sender, "cooldown", "format_time", StringUtils.millisToStringTime(timeMillis));
     }
 
     private static void sendCommonMessage(CommandSender sender, String path, String... data) {

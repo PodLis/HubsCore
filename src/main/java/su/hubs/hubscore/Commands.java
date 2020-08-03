@@ -35,7 +35,7 @@ public class Commands implements CommandExecutor, TabCompleter {
 
                     case "reload-all":
                     case "r":
-                        if (!Permissions.RELOAD.senderHasPerm(sender)) {
+                        if (!GlobalPermission.RELOAD.senderHasPerm(sender)) {
                             MessageUtils.sendNoPermMessage(sender, args[0]);
                             return true;
                         }
@@ -45,7 +45,7 @@ public class Commands implements CommandExecutor, TabCompleter {
 
                     case "reload-strings":
                     case "rs":
-                        if (!Permissions.RELOAD.senderHasPerm(sender)) {
+                        if (!GlobalPermission.RELOAD.senderHasPerm(sender)) {
                             MessageUtils.sendNoPermMessage(sender, args[0]);
                             return true;
                         }
@@ -54,7 +54,7 @@ public class Commands implements CommandExecutor, TabCompleter {
                         return true;
 
                     case "info":
-                        if (!Permissions.RELOAD.senderHasPerm(sender)) {
+                        if (!GlobalPermission.RELOAD.senderHasPerm(sender)) {
                             MessageUtils.sendNoPermMessage(sender, args[0]);
                             return true;
                         }
@@ -64,7 +64,7 @@ public class Commands implements CommandExecutor, TabCompleter {
                         return true;
 
                     case "server":
-                        if (!Permissions.RELOAD.senderHasPerm(sender)) {
+                        if (!GlobalPermission.RELOAD.senderHasPerm(sender)) {
                             MessageUtils.sendNoPermMessage(sender, args[0]);
                             return true;
                         }
@@ -130,7 +130,7 @@ public class Commands implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (!Permissions.RELOAD.senderHasPerm(sender)) {
+        if (!GlobalPermission.RELOAD.senderHasPerm(sender)) {
             return null;
         }
 

@@ -197,4 +197,7 @@ public class StringUtils {
         return lines;
     }
 
+    public static String millisToStringTime(long timeMillis) {
+        return "NOT REALIZED";
+    }
 }
